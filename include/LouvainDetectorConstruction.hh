@@ -29,44 +29,44 @@ class G4PhysicalVolume ;
 
 class LouvainDetectorConstruction : public G4VUserDetectorConstruction
 {
-    public :
-        // Constructor
-        LouvainDetectorConstruction() ;
-        // Destructor
-        virtual ~LouvainDetectorConstruction() ;
+  public :
+    // Constructor
+    LouvainDetectorConstruction() ;
+    // Destructor
+    virtual ~LouvainDetectorConstruction() ;
 
-        virtual void ConstructSDandField();
+    void DefineMaterials() ;
+    G4VPhysicalVolume* Construct() ;
+    G4Trd* Trapezoid(G4String name, G4double width) ;
+    void PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume *pMotherLogical) ; 
 
-        void DefineMaterials() ;
-        G4VPhysicalVolume* Construct() ;
-        G4Trd* Trapezoid(G4String name, G4double width) ;
-        void PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume *pMotherLogical) ; 
+  private :
+    G4Material*        fFR4Mat;
+    G4Material*        fGasMat;
+    G4Material*        fEmptyMat;
+    G4Material*        fAirMat;
+    G4Material*        fCuMat;
+    G4Material*        fKAPTONMat;
+    G4double           tripleGemThinBase; 
+    G4double           tripleGemLargeBase;
+    G4double           tripleGemHeight;
 
-    private :
-        G4Material*        fFR4Mat;
-        G4Material*        fGasMat;
-        G4Material*        fEmptyMat;
-        G4Material*        fAirMat;
-        G4Material*        fCuMat;
-        G4Material*        fKAPTONMat;
-        //    G4ProductionCuts*  fGasDetectorCuts;
-        G4double           tripleGemThinBase; 
-        G4double           tripleGemLargeBase;
-        G4double           tripleGemHeight;
+    std::vector<G4Trd*>           trdCollection ;
+    std::vector<G4LogicalVolume*> trdLogCollection ;
 
-        //   std::vector<G4Trd*> 	    TrdStrati;
-        //   G4LogicalVolume*		    logicStrati[21];
-        std::vector<G4Trd*>           trdCollection ;
-        std::vector<G4LogicalVolume*> trdLogCollection ;
+    //    G4ProductionCuts*  fGasDetectorCuts;
 
-        // //For Electric Field
-        // G4ElectricField*        fEMfield;
-        // G4EqMagElectricField*   fEquation;
-        // G4MagIntegratorStepper* fStepper;
-        // G4FieldManager*         fFieldMgr;
-        // G4double                fMinStep ;
-        // G4ChordFinder*          fChordFinder ;
-        // G4MagInt_Driver*        fIntgrDriver;
+    //   std::vector<G4Trd*> 	    TrdStrati;
+    //   G4LogicalVolume*		    logicStrati[21];
+
+    // //For Electric Field
+    // G4ElectricField*        fEMfield;
+    // G4EqMagElectricField*   fEquation;
+    // G4MagIntegratorStepper* fStepper;
+    // G4FieldManager*         fFieldMgr;
+    // G4double                fMinStep ;
+    // G4ChordFinder*          fChordFinder ;
+    // G4MagInt_Driver*        fIntgrDriver;
 
 };
 

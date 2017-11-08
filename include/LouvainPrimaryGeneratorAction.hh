@@ -45,16 +45,16 @@ class G4Event;
 
 class LouvainPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-    public:
-        LouvainPrimaryGeneratorAction();    
-        ~LouvainPrimaryGeneratorAction();
+  public:
+    LouvainPrimaryGeneratorAction();    
+    ~LouvainPrimaryGeneratorAction();
 
-    public:
-        virtual void GeneratePrimaries(G4Event*);
-        G4ParticleGun* GetParticleGun() { return fParticleGun;} ;
+  public:
+    virtual void GeneratePrimaries(G4Event*);
+    G4ParticleGun* GetParticleGun() { return fParticleGun;} ;
             
-    private:
-        G4ParticleGun*  fParticleGun;
+  private:
+    G4ParticleGun*  fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

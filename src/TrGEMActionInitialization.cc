@@ -6,7 +6,7 @@
 #include "TrGEMStackingAction.hh"
 
 TrGEMActionInitialization::TrGEMActionInitialization()
- : G4VUserActionInitialization()
+: G4VUserActionInitialization()
 {
 }
 
@@ -17,12 +17,12 @@ TrGEMActionInitialization::~TrGEMActionInitialization()
 //0000000000000000000000000000000000000000000000000000000000000000000000000000
 
 void TrGEMActionInitialization::BuildForMaster() const {
-   	TrGEMRunAction* runAction = new TrGEMRunAction;
+  TrGEMRunAction* runAction = new TrGEMRunAction;
 	SetUserAction(runAction);
 }
 
 void TrGEMActionInitialization::Build() const {
-   	SetUserAction(new LouvainPrimaryGeneratorAction);
+  SetUserAction(new LouvainPrimaryGeneratorAction);
 	
 	TrGEMRunAction* runAction = new TrGEMRunAction;
 	SetUserAction(runAction);

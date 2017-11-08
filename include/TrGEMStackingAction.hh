@@ -7,14 +7,14 @@
 
 class G4Track;
 
-class TrGEMStackingAction : public G4UserStackingAction {
+class TrGEMStackingAction : public G4UserStackingAction 
+{
+  public:
+    // Constructor & Destructor
+    TrGEMStackingAction();
+    virtual ~TrGEMStackingAction();
 
-    public:
-        // Constructor & Destructor
-        TrGEMStackingAction();
-        virtual ~TrGEMStackingAction();
-
-        virtual G4ClassificationOfNewTrack ClassifyNewTrack( const G4Track* aTrack );
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack( const G4Track* aTrack );
 };
 
 #endif

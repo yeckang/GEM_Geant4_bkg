@@ -9,11 +9,11 @@ class G4Event;
 
 class TrGEMEventAction : public G4UserEventAction
 {
-    public:
-        TrGEMEventAction();
-        ~TrGEMEventAction();
-        void BeginOfEventAction(const G4Event* anEvent);
-        void EndOfEventAction(const G4Event* anEvent);
+  public:
+    TrGEMEventAction();
+    ~TrGEMEventAction();
+    void BeginOfEventAction(const G4Event* anEvent);
+    void EndOfEventAction(const G4Event* anEvent);
 
 };
 

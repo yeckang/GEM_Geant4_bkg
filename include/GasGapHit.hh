@@ -20,15 +20,15 @@
  *  - Deposited energy in layer
  */
 class GasGapHit : public G4VHit {
-public:
+  public:
     /// Constructor
     GasGapHit(const G4int layer);
     /// Destructor
     ~GasGapHit();
     //! Print on screen a Hit
     void Print();
-  
-public:
+
+  public:
     //! \name The new and delete operators are overloaded for performances reasons:
     /*! -- Tricky business here... :-(, but provided for you below */
     //@{
@@ -36,7 +36,7 @@ public:
     inline void  operator delete(void *aHit);
     //@}
 
-public:
+  public:
     //! \name  simple set and get methods
     //@{
     void          AddEdep(const double e){ eDep += e; }
@@ -45,7 +45,7 @@ public:
     G4int         GetLayerNumber() const { return layerNumber; }
     //@}
 
-private:
+  private:
     const G4int   layerNumber;
     G4double      eDep;
 };
@@ -59,13 +59,13 @@ extern G4Allocator<GasGapHit> GasGapHitAllocator;
 
 inline void* GasGapHit::operator new(size_t)
 {
-    void *aHit;
-    aHit = (void *) GasGapHitAllocator.MallocSingle();
-    return aHit;
+  void *aHit;
+  aHit = (void *) GasGapHitAllocator.MallocSingle();
+  return aHit;
 }
 inline void GasGapHit::operator delete(void *aHit)
 {
-    GasGapHitAllocator.FreeSingle((GasGapHit*) aHit);
+  GasGapHitAllocator.FreeSingle((GasGapHit*) aHit);
 }
 
 #endif

@@ -7,11 +7,11 @@
 
 class TrGEMSteppingAction : public G4UserSteppingAction
 {
-    public:
-        TrGEMSteppingAction();
-        ~TrGEMSteppingAction(){};
+  public:
+    TrGEMSteppingAction();
+    ~TrGEMSteppingAction(){};
 
-        void UserSteppingAction(const G4Step*);
+    void UserSteppingAction(const G4Step*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

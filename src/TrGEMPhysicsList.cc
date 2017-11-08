@@ -77,120 +77,120 @@
 
 TrGEMPhysicsList::TrGEMPhysicsList() : G4VModularPhysicsList()
 {
-    fConfig = G4LossTableManager::Instance()->EmConfigurator();
-    G4LossTableManager::Instance()->SetVerbose(1);
-    defaultCutValue = 1.*mm;
-    fCutForGamma     = defaultCutValue;
-    fCutForElectron  = defaultCutValue;
-    fCutForPositron  = defaultCutValue;
-    fCutForProton    = defaultCutValue;
+  fConfig = G4LossTableManager::Instance()->EmConfigurator();
+  G4LossTableManager::Instance()->SetVerbose(1);
+  defaultCutValue = 1.*mm;
+  fCutForGamma     = defaultCutValue;
+  fCutForElectron  = defaultCutValue;
+  fCutForPositron  = defaultCutValue;
+  fCutForProton    = defaultCutValue;
 
-    //fMessenger = new PhysicsListMessenger(this);
+  //fMessenger = new PhysicsListMessenger(this);
 
-    //fStepMaxProcess = new StepMax();
+  //fStepMaxProcess = new StepMax();
 
-    // Decay Physics is always defined
-    fDecayPhysicsList = new G4DecayPhysics();
+  // Decay Physics is always defined
+  fDecayPhysicsList = new G4DecayPhysics();
 
-    // EM physics
-    fEmName = G4String("emstandard");
-    fEmPhysicsList = new G4EmStandardPhysics(1);
-    //AddPhysicsList("pai") ; 
-    AddPhysicsList("pai_photon") ; 
+  // EM physics
+  fEmName = G4String("emstandard");
+  fEmPhysicsList = new G4EmStandardPhysics(1);
+  //AddPhysicsList("pai") ; 
+  AddPhysicsList("pai_photon") ; 
 
-    SetVerboseLevel(1);
+  SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrGEMPhysicsList::~TrGEMPhysicsList()
 {
-    //delete fMessenger;
-    delete fDecayPhysicsList;
-    delete fEmPhysicsList;
-    for(size_t i=0; i<fHadronPhys.size(); ++i) { delete fHadronPhys[i]; }
-    //delete fStepMaxProcess;
+  //delete fMessenger;
+  delete fDecayPhysicsList;
+  delete fEmPhysicsList;
+  for(size_t i=0; i<fHadronPhys.size(); ++i) { delete fHadronPhys[i]; }
+  //delete fStepMaxProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrGEMPhysicsList::ConstructParticle()
 {
-    fDecayPhysicsList->ConstructParticle();
+  fDecayPhysicsList->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrGEMPhysicsList::ConstructProcess()
 {
-    AddTransportation();
-    fEmPhysicsList->ConstructProcess();
-    fDecayPhysicsList->ConstructProcess();
-    for(size_t i=0; i<fHadronPhys.size(); ++i) { fHadronPhys[i]->ConstructProcess(); }
-    //AddStepMax();
+  AddTransportation();
+  fEmPhysicsList->ConstructProcess();
+  fDecayPhysicsList->ConstructProcess();
+  for(size_t i=0; i<fHadronPhys.size(); ++i) { fHadronPhys[i]->ConstructProcess(); }
+  //AddStepMax();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrGEMPhysicsList::AddPhysicsList(const G4String& name)
 {
-    if (verboseLevel>1) {
-        G4cout << "TrGEMPhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
-    }
+  if (verboseLevel>1) {
+    G4cout << "TrGEMPhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  }
 
-    if (name == fEmName) {
-        return;
+  if (name == fEmName) {
+      return;
 
-    } else if (name == "emstandard_opt1") {
+  } else if (name == "emstandard_opt1") {
 
-        fEmName = name;
-        delete fEmPhysicsList;
-        fEmPhysicsList = new G4EmStandardPhysics_option1();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option1();
 
-    } else if (name == "emstandard_opt2") {
+  } else if (name == "emstandard_opt2") {
 
-        fEmName = name;
-        delete fEmPhysicsList;
-        fEmPhysicsList = new G4EmStandardPhysics_option2();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option2();
 
-    } else if (name == "emstandard_opt3") {
+  } else if (name == "emstandard_opt3") {
 
-        fEmName = name;
-        delete fEmPhysicsList;
-        fEmPhysicsList = new G4EmStandardPhysics_option3();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option3();
 
-    } else if (name == "emstandard_opt4") {
+  } else if (name == "emstandard_opt4") {
 
-        fEmName = name;
-        delete fEmPhysicsList;
-        fEmPhysicsList = new G4EmStandardPhysics_option4();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
 
-    } else if (name == "emlivermore") {
+  } else if (name == "emlivermore") {
 
-        fEmName = name;
-        delete fEmPhysicsList;
-        fEmPhysicsList = new G4EmLivermorePhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLivermorePhysics();
 
-    } else if (name == "empenelope") {
+  } else if (name == "empenelope") {
 
-        fEmName = name;
-        delete fEmPhysicsList;
-        fEmPhysicsList = new G4EmPenelopePhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmPenelopePhysics();
 
-    } else if (name == "pai") {
+  } else if (name == "pai") {
 
-        fEmName = name;
-        AddPAIModel(name);
+    fEmName = name;
+    AddPAIModel(name);
 
-    } else if (name == "pai_photon") { 
+  } else if (name == "pai_photon") { 
 
-        fEmName = name;
-        //AddPAIModel(name);
+    fEmName = name;
+    //AddPAIModel(name);
 
-    } else {
+  } else {
 
-        G4cout << "TrGEMPhysicsList::AddPhysicsList: <" << name << ">" << " is not defined" << G4endl;
-    }
+    G4cout << "TrGEMPhysicsList::AddPhysicsList: <" << name << ">" << " is not defined" << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -216,90 +216,90 @@ void TrGEMPhysicsList::AddPhysicsList(const G4String& name)
 
 void TrGEMPhysicsList::SetCuts()
 {
-    G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100.*eV,1e5);
-    if ( verboseLevel > 0 )
-    {
-        G4cout << "TrGEMPhysicsList::SetCuts:";
-        G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-    }
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100.*eV,1e5);
+  if ( verboseLevel > 0 )
+  {
+    G4cout << "TrGEMPhysicsList::SetCuts:";
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
+  }
 
 // set cut values for gamma at first and for e- second and next for e+,
 // because some processes for e+/e- need cut values for gamma
 
-    SetCutValue(fCutForGamma, "gamma");
-    SetCutValue(fCutForElectron, "e-");
-    SetCutValue(fCutForPositron, "e+");
-    SetCutValue(fCutForProton, "proton");
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForPositron, "e+");
+  SetCutValue(fCutForProton, "proton");
 
-    if ( verboseLevel > 0 ) { DumpCutValuesTable(); }
+  if ( verboseLevel > 0 ) { DumpCutValuesTable(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrGEMPhysicsList::SetCutForGamma(G4double cut)
 {
-    fCutForGamma = cut;
-    SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
+  fCutForGamma = cut;
+  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrGEMPhysicsList::SetCutForElectron(G4double cut)
 {
-    fCutForElectron = cut;
-    SetParticleCuts(fCutForElectron, G4Electron::Electron());
+  fCutForElectron = cut;
+  SetParticleCuts(fCutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrGEMPhysicsList::SetCutForPositron(G4double cut)
 {
-    fCutForPositron = cut;
-    SetParticleCuts(fCutForPositron, G4Positron::Positron());
+  fCutForPositron = cut;
+  SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrGEMPhysicsList::SetCutForProton(G4double cut)
 {
-    fCutForPositron = cut;
-    SetParticleCuts(fCutForProton, G4Proton::Proton());
+  fCutForPositron = cut;
+  SetParticleCuts(fCutForProton, G4Proton::Proton());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrGEMPhysicsList::AddPAIModel(const G4String& modname)
 {
-    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-    G4ParticleDefinition* particle;
-    particle = particleTable -> FindParticle("e-");
-    NewPAIModel(particle, modname, "eIoni");
-    particle = particleTable -> FindParticle("e+");
-    NewPAIModel(particle, modname, "eIoni");
-    particle = particleTable -> FindParticle("mu-");
-    NewPAIModel(particle, modname, "muIoni");
-    particle = particleTable -> FindParticle("mu+");
-    NewPAIModel(particle, modname, "muIoni");
-    particle = particleTable -> FindParticle("proton");
-    NewPAIModel(particle, modname, "hIoni");
-    particle = particleTable -> FindParticle("pi+");
-    NewPAIModel(particle, modname, "hIoni");
-    particle = particleTable -> FindParticle("pi-");
-    NewPAIModel(particle, modname, "hIoni");
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* particle;
+  particle = particleTable -> FindParticle("e-");
+  NewPAIModel(particle, modname, "eIoni");
+  particle = particleTable -> FindParticle("e+");
+  NewPAIModel(particle, modname, "eIoni");
+  particle = particleTable -> FindParticle("mu-");
+  NewPAIModel(particle, modname, "muIoni");
+  particle = particleTable -> FindParticle("mu+");
+  NewPAIModel(particle, modname, "muIoni");
+  particle = particleTable -> FindParticle("proton");
+  NewPAIModel(particle, modname, "hIoni");
+  particle = particleTable -> FindParticle("pi+");
+  NewPAIModel(particle, modname, "hIoni");
+  particle = particleTable -> FindParticle("pi-");
+  NewPAIModel(particle, modname, "hIoni");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrGEMPhysicsList::NewPAIModel(const G4ParticleDefinition* part, const G4String& modname, const G4String& procname)
 {
-    G4String partname = part->GetParticleName();
-    if(modname == "pai") {
-        G4PAIModel* pai = new G4PAIModel(part,"PAIModel");
-        fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector", 0.0, 100.*TeV, pai);
-    } else if(modname == "pai_photon") {
-        G4PAIPhotModel* pai = new G4PAIPhotModel(part,"PAIPhotModel");
-        fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector", 0.0, 100.*TeV, pai);
-    }
+  G4String partname = part->GetParticleName();
+  if(modname == "pai") {
+    G4PAIModel* pai = new G4PAIModel(part,"PAIModel");
+    fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector", 0.0, 100.*TeV, pai);
+  } else if(modname == "pai_photon") {
+    G4PAIPhotModel* pai = new G4PAIPhotModel(part,"PAIPhotModel");
+    fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector", 0.0, 100.*TeV, pai);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

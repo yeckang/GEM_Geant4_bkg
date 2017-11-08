@@ -4,12 +4,12 @@
 #include "G4VUserActionInitialization.hh"
 
 class TrGEMActionInitialization : public G4VUserActionInitialization{
-	public:
-	TrGEMActionInitialization();
-	virtual ~TrGEMActionInitialization();
+  public:
+    TrGEMActionInitialization();
+    virtual ~TrGEMActionInitialization();
 
-	virtual void Build() const;
-	virtual void BuildForMaster() const;
+    virtual void Build() const;
+    virtual void BuildForMaster() const;
 };
 
 
