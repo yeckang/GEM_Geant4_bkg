@@ -7,6 +7,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4String.hh"
+#include "G4Track.hh"
 
 #include <TROOT.h>
 #include <TFile.h>
@@ -98,11 +99,20 @@ void TrGEMAnalysis::PrepareNewEvent(const G4Event* /*anEvent*/)
     momentumZ.clear();
 
     driftProcess.clear();
-    driftProcessS.clear();
-    driftProcessW.clear();
+    driftProcessWithoutTransportation.clear();
+    driftTransportation.clear();
     driftProcessByPrimary.clear();
     driftProcessBySecondary.clear();
- 
+    
+    driftGenProcess.clear();
+    driftGenVolume.clear();
+
+    secondaryParticle.clear();
+    // gammaContainer.clear();
+    secondaryGammaE.clear();
+
+    neutronGenProcess.clear();
+    neutronGenVolume.clear();
 }
 
 void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
@@ -136,10 +146,6 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
     pmomentumX =  &momentumX;
     pmomentumY =  &momentumY;
     pmomentumZ =  &momentumZ;
-
-    pdriftProcess = &driftProcess;
-    pdriftProcessS = &driftProcessS;
-    pdriftProcessW = &driftProcessW;
 
     // create ROOT file
     m_ROOT_file = new TFile("task3.root","RECREATE");
@@ -199,6 +205,10 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
     
     t->Branch("postTrackPart",&ppostTrackPart);
     t->Branch("postTrackEne",&ppostTrackEne);
+
+    t->Branch("neutronGenProcess", &neutronGenProcess);
+    t->Branch("neutronGenVolume", &neutronGenVolume);
+    
     
 
     g = new TTree("Garfield","Interesting variables for Garfield") ;
@@ -215,13 +225,21 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
     //g->Branch("momentumDirectionY",&momentumDirectionY,"momentumDirectionY/D") ;
     // g->Branch("momentumDirectionZ",&momentumDirectionZ,"momentumDirectionZ/D") ;
 
+    //drift region data
     b = new TTree("Drift", "Physical processes in drift region");
     b->Branch("driftProcess", &driftProcess);
-    b->Branch("driftProcessWithoutTransportation", &driftProcessS);
-    b->Branch("driftTransportation", &driftProcessW);
+    b->Branch("driftProcessWithoutTransportation", &driftProcessWithoutTransportation);
+    b->Branch("driftTransportation", &driftTransportation);
     b->Branch("driftProcessByPrimary", &driftProcessByPrimary);
     b->Branch("driftProcessBySecondary", &driftProcessBySecondary);
-   
+    
+    //drift gen data
+    b->Branch("driftGenProcess", &driftGenProcess);
+    b->Branch("driftGenVolume", &driftGenVolume);
+
+    //secondary particle from primary
+    b->Branch("secondaryParticle", &secondaryParticle);
+    b->Branch("secondaryGammaEnergy", &secondaryGammaE);
 }
 
 void TrGEMAnalysis::EndOfEvent(const G4Event* /*anEvent*/)
@@ -446,10 +464,10 @@ void TrGEMAnalysis::SaveGarfieldQuantities(
 
 }
 
-void TrGEMAnalysis::SaveDriftRegion(std::string pProcess, G4bool flag, G4int index) {
+void TrGEMAnalysis::SaveDriftRegion(std::string pProcess, G4int index) {
     driftProcess.push_back( pProcess );
-    if(flag) {
-        driftProcessS.push_back( pProcess );
+    if(pProcess != "Transportation") {
+        driftProcessWithoutTransportation.push_back( pProcess );
         if(index == 1) {
             driftProcessByPrimary.push_back( pProcess );
         }
@@ -458,6 +476,37 @@ void TrGEMAnalysis::SaveDriftRegion(std::string pProcess, G4bool flag, G4int ind
         }
     }
     else {
-        driftProcessW.push_back( pProcess );
+        driftTransportation.push_back( pProcess );
     }
+}
+
+// void TrGEMAnalysis::SaveGamma(G4int id){
+//     gammaContainer.push_back(id);
+// }
+
+void TrGEMAnalysis::SaveGenRegion(G4int id, std::string gProcess, std::string gVolume){
+    // for(G4int i = 0; i < gammaContainer.size(); i++){
+    //     if(gammaContainer[i] == id){
+    //         driftGenProcess.push_back( gProcess );
+    //         driftGenVolume.push_back( gVolume );
+    //         gammaContainer.erase(gammaContainer.begin()+i);
+    //     }
+    // }
+
+    if(id == 1){
+        driftGenProcess.push_back( gProcess );
+        driftGenVolume.push_back( gVolume );
+    }
+}
+
+void TrGEMAnalysis::SaveSecondary(const G4Track* track){
+    secondaryParticle.push_back(track->GetParticleDefinition()->GetParticleName());
+    if(track->GetParticleDefinition()->GetPDGEncoding() == 22){
+        secondaryGammaE.push_back(track->GetKineticEnergy()/keV);
+    }
+}
+
+void TrGEMAnalysis::SaveNeutron(G4String genprocess, G4String genvolume){
+    neutronGenProcess.push_back(genprocess);
+    neutronGenVolume.push_back(genvolume);
 }

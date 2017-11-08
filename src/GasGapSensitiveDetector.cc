@@ -129,6 +129,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
     const G4String procname = proc->GetProcessName();
     G4double edepI=edep-step->GetNonIonizingEnergyDeposit();
     G4int trackIndex=track->GetTrackID();
+    G4int parentIndex = track->GetParentID();
     double genz= track->GetVertexPosition().getZ(); 
 
     G4String genprocess;
@@ -164,16 +165,20 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
                 driftDepI[t] += edepI ;
             }
         }
-        // if(trackIndex == 1){
-        if(procname != "Transportation") {
-            TrGEMAnalysis::GetInstance()->SaveDriftRegion(procname, true, trackIndex);
-            // G4cout << step->GetSecondary()->size() << G4endl;
-            // if(step->GetSecondary()->size()==1){
-            //     G4cout << (*step->GetSecondary())[0]->GetParticleDefinition()->GetParticleName() << G4endl;
-            //     G4cout << (*step->GetSecondary())[0]->GetCreatorProcess()->GetProcessName() << "  =?  " << procname << G4endl;
-            // }
-        }
-        else TrGEMAnalysis::GetInstance()->SaveDriftRegion(procname, false, trackIndex);
+        TrGEMAnalysis::GetInstance()->SaveDriftRegion(procname, trackIndex);
+        // if(trackIndex > 1) {
+        //     TrGEMAnalysis::GetInstance()->SaveSecondary(step->GetTrack())
+        // }
+
+
+        // if(trackIndex == 1 /*&& procname =="NeutronInelastic"*/){
+        //     const std::vector<const G4Track*>* secondaries = step->GetSecondaryInCurrentStep();
+        //     for(G4int i = 0; i < secondaries->size(); i++){
+        //         if(secondaries->at(i)->GetParticleDefinition()->GetPDGEncoding() == 22){
+        //             TraGEMAnalysis::saveGamma(secondaries->at(i)->GetTrackID())
+        //         }
+        //         TrGEMAnalysis::GetInstance()->SaveSecondary(secondaries->at(i));
+        //     }
         // }
     }
 
@@ -271,7 +276,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
     //_________________________________________________________________________
 
 
-    if(volName == "GasGap1" || volName == "GasGap2") {
+    if(volName == "GasGap1" || volName == "GasGap2" && trackIndex != 1) {
         // we're in one of the gaps
 
         for(G4int T=0;T< ttTrack.size();T++){
@@ -287,7 +292,12 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
             contaSec=trackIndex;
             ttTrack.push_back(trackIndex);
             // G4cout<<trackIndex <<" trackIndex pdg "<<pdg<<" genprocess "<<genprocess<<G4endl;
-
+            if(pdg == 11 || pdg == -11){
+                TrGEMAnalysis::GetInstance()->SaveGenRegion(parentIndex ,genprocess, genvolume);
+            }
+            if(parentIndex == 1){
+                TrGEMAnalysis::GetInstance()->SaveNeutron(genprocess, genvolume);
+            }
         }  
 
         //se la particella e'� un elettrone 
@@ -300,7 +310,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
 
 
         //FOR GARFIELD
-        if(volName == "GasGap1"){
+        if(volName == "GasGap1" && trackIndex != 1){
 
             for(G4int T=0;T< ttTrack_Gar.size();T++){
                 if (ttTrack_Gar[T]==trackIndex){
