@@ -41,11 +41,11 @@ int main(int argc, char** argv) {
     //gROOT->ProcessLine("#include <vector>");
 
     // construct the default run manager
-#ifdef G4MULTITHREADED
-    G4MTRunManager* runManager = new G4MTRunManager ;
-#else
+// #ifdef G4MULTITHREADED
+//     G4MTRunManager* runManager = new G4MTRunManager ;
+// #else
     G4RunManager* runManager = new G4RunManager;
-#endif
+// #endif
     // set mandatory initialization classes
 
     runManager->SetUserInitialization(new LouvainDetectorConstruction ) ;
