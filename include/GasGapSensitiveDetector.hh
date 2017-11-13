@@ -41,6 +41,8 @@ class GasGapSensitiveDetector : public G4VSensitiveDetector
     void EndOfEvent(G4HCofThisEvent* HCE);
     //@}
 
+    G4int GetGeneration(G4int index);
+
   private:
     G4double driftDep[9] ;
     G4double driftDepI[9] ;
@@ -99,7 +101,7 @@ class GasGapSensitiveDetector : public G4VSensitiveDetector
     typedef std::map<G4int,GasGapHit*> hitMap_t; //< Helper mapping layer number with hit
     hitMap_t hitMap;
     GasGapHitCollection* hitCollection;          //< Collection of calorimetric hits
-
+    std::map<G4int, G4int> container;
 };
 
 #endif

@@ -47,6 +47,7 @@ GasGapSensitiveDetector::GasGapSensitiveDetector(G4String SDname)
   ttTrack_B.clear();
   ttTrack_Gar.clear();
   postTrack.clear();
+  container.clear();
   
   zinteraction=-5;
   
@@ -127,9 +128,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
   G4int trackIndex=track->GetTrackID();
   G4int parentIndex = track->GetParentID();
   double genz= track->GetVertexPosition().getZ(); 
-  G4bool isPrimary = (trackIndex == 1);
-  G4bool isFromPrimary = (parentIndex == 1);
-
+  
   G4String genprocess;
   if(track->GetCreatorProcess()!=0) {
     const G4VProcess * genproc=track->GetCreatorProcess();  
@@ -140,12 +139,16 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
   const G4LogicalVolume *  genLogVolume=track->GetLogicalVolumeAtVertex();
   G4String genvolume= genLogVolume->GetName();
 
+  G4String name = track->GetParticleDefinition()->GetParticleName();
+
   if ((*step->GetSecondary()).size()>0 && trackIndex==1 && contaInteraction == 0){
     zinteraction=z; 
     contaInteraction=1;
   } 
 
+  container[trackIndex] = parentIndex;
 
+  G4int generation = GetGeneration(trackIndex);
 
   if( trackIndex==1 && (volName == "FakeBottom" || volName == "FakeTop")&& contaPrimary==0) {  
     //  if( trackIndex==1 ) {  
@@ -271,7 +274,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
 
     if(contaSec!=9999)  {
       // G4cout<<"New track trackIndex "<<trackIndex<<G4endl;
-      TrGEMAnalysis::GetInstance()->SaveGapTrack(pdg, charge, isPrimary, isFromPrimary, genprocess, genvolume,  genz, volName, energy );
+      TrGEMAnalysis::GetInstance()->SaveGapTrack(pdg, charge, generation, name, genprocess, genvolume,  genz, volName, energy );
       contaSec=trackIndex;
       ttTrack.push_back(trackIndex);
       // G4cout<<trackIndex <<" trackIndex pdg "<<pdg<<" genprocess "<<genprocess<<G4endl;
@@ -313,7 +316,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
     }
     if(contaSec_B!=9999)  {
       // G4cout<<"New track B trackIndex "<<trackIndex<<G4endl;
-      TrGEMAnalysis::GetInstance()->SaveGapTrack(pdg, charge, isPrimary, isFromPrimary, genprocess, genvolume,  genz, volName, energy );
+      TrGEMAnalysis::GetInstance()->SaveGapTrack(pdg, charge, generation, name, genprocess, genvolume,  genz, volName, energy );
       contaSec_B=trackIndex;
       ttTrack_B.push_back(trackIndex);
           
@@ -403,6 +406,7 @@ void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
   ttTrack_B.clear();
   ttTrack_Gar.clear();
   postTrack.clear();
+  container.clear();
       
   for(G4int t=0;t<9;t++){
           
@@ -443,4 +447,13 @@ void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
   zinteraction=-5.;
  
  
+}
+
+G4int GasGapSensitiveDetector::GetGeneration(G4int index){
+  G4int i = 1;
+  while(container[index] != 0){
+    index = container[index];
+    i++;
+  }
+  return i;
 }

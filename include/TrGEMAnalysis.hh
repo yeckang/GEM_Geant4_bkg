@@ -46,8 +46,8 @@ class TrGEMAnalysis {
     void SavePrimary(G4double primaryene, G4double zinteraction);
     void SaveGapTrack(G4int gapPart, 
                       G4int aCharge,
-                      G4bool isPrimary,
-                      G4bool isFromPrimary,
+                      G4int generation,
+                      std::string name,
                       std::string genprocess, 
                       std::string genvolume, 
                       G4double genz, 
@@ -131,8 +131,8 @@ class TrGEMAnalysis {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     std::vector<G4int> gapTrackPart ;
     std::vector<G4int> gapTrackCharge ;
-    std::vector<G4bool> isPrimaryGap ;
-    std::vector<G4bool> isFromPrimaryGap ;
+    std::vector<G4int> gapTrackGeneration ;
+    std::vector<std::string> gapTrackName ;
     std::vector<std::string> gapTrackGenProcess ;
     std::vector<std::string> gapTrackVolume ;
     std::vector<G4double> gapTrackGenZ ;

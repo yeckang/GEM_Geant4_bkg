@@ -87,8 +87,8 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
   
   t->Branch("gapTrackPart",&gapTrackPart);
   t->Branch("gapTrackCharge", &gapTrackCharge);
-  t->Branch("isPrimaryGap", &isPrimaryGap);
-  t->Branch("isFromPrimaryGap", &isFromPrimaryGap);
+  t->Branch("gapTrackGeneration", &gapTrackGeneration);
+  t->Branch("gapTrackName", &gapTrackName);
   t->Branch("gapTrackGenProcess",&gapTrackGenProcess);
   t->Branch("gapTrackVolume",&gapTrackVolume);
   t->Branch("gapTrackGenZ",&gapTrackGenZ);
@@ -160,8 +160,8 @@ void TrGEMAnalysis::PrepareNewEvent(const G4Event* /*anEvent*/)
   
   gapTrackPart.clear();
   gapTrackCharge.clear();
-  isPrimaryGap.clear();
-  isFromPrimaryGap.clear();
+  gapTrackGeneration.clear();
+  gapTrackName.clear();
   gapTrackGenProcess.clear();
   gapTrackVolume.clear();
   gapTrackGenZ.clear();
@@ -351,8 +351,8 @@ void TrGEMAnalysis::SavePrimary(G4double primaryene, G4double zinteraction){
 void TrGEMAnalysis::SaveGapTrack(
   G4int gapPart, 
   G4int gapCharge,
-  G4bool isPrimary,
-  G4bool isFromPrimary,
+  G4int generation,
+  std::string name,
   std::string genprocess, 
   std::string genvolume, 
   G4double genz, 
@@ -361,8 +361,8 @@ void TrGEMAnalysis::SaveGapTrack(
 {
   gapTrackPart.push_back(gapPart) ;
   gapTrackCharge.push_back(gapCharge) ;
-  isPrimaryGap.push_back(isPrimary) ;
-  isFromPrimaryGap.push_back(isFromPrimary) ;
+  gapTrackGeneration.push_back(generation) ;
+  gapTrackName.push_back(name) ;
   gapTrackGenProcess.push_back(genprocess) ;
   gapTrackVolume.push_back(genvolume) ;
   gapTrackGenZ.push_back(genz) ;
