@@ -67,7 +67,7 @@
 #include "G4LossTableManager.hh"
 #include "G4ProductionCutsTable.hh"
 
-//#include "StepMax.hh"
+#include "StepMax.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
@@ -85,9 +85,7 @@ TrGEMPhysicsList::TrGEMPhysicsList() : G4VModularPhysicsList()
   fCutForPositron  = defaultCutValue;
   fCutForProton    = defaultCutValue;
 
-  //fMessenger = new PhysicsListMessenger(this);
-
-  //fStepMaxProcess = new StepMax();
+  fStepMaxProcess = new StepMax();
 
   // Decay Physics is always defined
   fDecayPhysicsList = new G4DecayPhysics();
@@ -95,7 +93,7 @@ TrGEMPhysicsList::TrGEMPhysicsList() : G4VModularPhysicsList()
   // EM physics
   fEmName = G4String("emstandard");
   fEmPhysicsList = new G4EmStandardPhysics(1);
-  //AddPhysicsList("pai") ; 
+  AddPhysicsList("pai") ; 
   AddPhysicsList("pai_photon") ; 
 
   SetVerboseLevel(1);
@@ -109,7 +107,7 @@ TrGEMPhysicsList::~TrGEMPhysicsList()
   delete fDecayPhysicsList;
   delete fEmPhysicsList;
   for(size_t i=0; i<fHadronPhys.size(); ++i) { delete fHadronPhys[i]; }
-  //delete fStepMaxProcess;
+  delete fStepMaxProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -127,7 +125,7 @@ void TrGEMPhysicsList::ConstructProcess()
   fEmPhysicsList->ConstructProcess();
   fDecayPhysicsList->ConstructProcess();
   for(size_t i=0; i<fHadronPhys.size(); ++i) { fHadronPhys[i]->ConstructProcess(); }
-  //AddStepMax();
+  AddStepMax();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -195,22 +193,24 @@ void TrGEMPhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-/*void TrGEMPhysicsList::AddStepMax()
+void TrGEMPhysicsList::AddStepMax()
 {
-    // Step limitation seen as a process
+  // Step limitation seen as a process
+  fStepMaxProcess = new StepMax();
 
-    theParticleIterator->reset();
-    while ((*theParticleIterator)())
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)())
+  {
+    G4ParticleDefinition* particle = particleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+
+    if (fStepMaxProcess->IsApplicable(*particle))
     {
-        G4ParticleDefinition* particle = theParticleIterator->value();
-        G4ProcessManager* pmanager = particle->GetProcessManager();
-
-        if (fStepMaxProcess->IsApplicable(*particle))
-        {
-            pmanager ->AddDiscreteProcess(fStepMaxProcess);
-        }
+      pmanager->AddDiscreteProcess(fStepMaxProcess);
     }
-}*/
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

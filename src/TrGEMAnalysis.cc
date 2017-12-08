@@ -64,23 +64,32 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
 
   // create tree and branch(es)
   t = new TTree("MyRun","Run with awesome data") ;
-  
-  t->Branch("driftEdep",driftEdep,"driftEdep[9]/D") ;
-  t->Branch("driftEdepI",driftEdepI,"driftEdepI[9]/D") ;
-  t->Branch("transferEdep",transferEdep, "transferEdep[9]/D") ;
-  t->Branch("transferEdepI",transferEdepI, "transferEdepI[9]/D") ;
-  t->Branch("transfer2Edep",transfer2Edep, "transfer2Edep[9]/D") ;
-  t->Branch("transfer2EdepI",transfer2EdepI, "transfer2EdepI[9]/D") ;
-  t->Branch("inductionEdep",inductionEdep, "inductionEdep[9]/D") ;
-  t->Branch("inductionEdepI",inductionEdepI, "inductionEdepI[9]/D") ;
-  t->Branch("driftEdep_B",driftEdep_B,"driftEdep_B[9]/D") ;
-  t->Branch("driftEdepI_B",driftEdepI_B,"driftEdepI_B[9]/D") ;
-  t->Branch("transferEdep_B",transferEdep_B, "transferEdep_B[9]/D") ;
-  t->Branch("transferEdepI_B",transferEdepI_B, "transferEdepI_B[9]/D") ;
-  t->Branch("transfer2Edep_B",transfer2Edep_B, "transfer2Edep_B[9]/D") ;
-  t->Branch("transfer2EdepI_B",transfer2EdepI_B, "transfer2EdepI_B[9]/D") ;
-  t->Branch("inductionEdep_B",inductionEdep_B, "inductionEdep_B[9]/D") ;
-  t->Branch("inductionEdepI_B",inductionEdepI_B, "inductionEdepI_B[9]/D") ;
+
+  // t->Branch("driftEdep",&driftEdep,"driftEdep/D") ;
+  // t->Branch("driftEdepI",&driftEdepI,"driftEdepI/D") ;
+  // t->Branch("transferEdep",&transferEdep, "transferEdep/D") ;
+  // t->Branch("transferEdepI",&transferEdepI, "transferEdepI/D") ;
+  // t->Branch("transfer2Edep",&transfer2Edep, "transfer2Edep/D") ;
+  // t->Branch("transfer2EdepI",&transfer2EdepI, "transfer2EdepI/D") ;
+  // t->Branch("inductionEdep",&inductionEdep, "inductionEdep/D") ;
+  // t->Branch("inductionEdepI",&inductionEdepI, "inductionEdepI/D") ;
+  // t->Branch("driftEdep_B",&driftEdep_B,"driftEdep_B/D") ;
+  // t->Branch("driftEdepI_B",&driftEdepI_B,"driftEdepI_B/D") ;
+  // t->Branch("transferEdep_B",&transferEdep_B, "transferEdep_B/D") ;
+  // t->Branch("transferEdepI_B",&transferEdepI_B, "transferEdepI_B/D") ;
+  // t->Branch("transfer2Edep_B",&transfer2Edep_B, "transfer2Edep_B/D") ;
+  // t->Branch("transfer2EdepI_B",&transfer2EdepI_B, "transfer2EdepI_B/D") ;
+  // t->Branch("inductionEdep_B",&inductionEdep_B, "inductionEdep_B/D") ;
+  // t->Branch("inductionEdepI_B",&inductionEdepI_B, "inductionEdepI_B/D") ;
+
+  t->Branch("driftEdep",&driftEdep) ;
+  t->Branch("driftEdepI",&driftEdepI) ;
+  t->Branch("transfer1Edep",&transfer1Edep) ;
+  t->Branch("transfer1EdepI",&transfer1EdepI) ;
+  t->Branch("transfer2Edep",&transfer2Edep) ;
+  t->Branch("transfer2EdepI",&transfer2EdepI) ;
+  t->Branch("inductionEdep",&inductionEdep) ;
+  t->Branch("inductionEdepI",&inductionEdepI) ;
 
   t->Branch("primaryEne",&primaryEne, "primaryEne/D") ;
   t->Branch("zInteraction",&zInteraction, "zInteraction/D") ;
@@ -128,33 +137,42 @@ void TrGEMAnalysis::PrepareNewEvent(const G4Event* /*anEvent*/)
   gammaxevt = 0 ;
   secoxevt = 0 ;
 
-  for(G4int t=0;t<9;t++){
+  // driftEdep = 0. ;
+  // driftEdepI = 0. ;
+
+  // transferEdep = 0. ;
+  // transferEdepI = 0. ;
   
-    driftEdep[t] = 0. ;
-    driftEdepI[t] = 0. ;
+  // transfer2Edep  = 0. ;
+  // transfer2EdepI  = 0. ;
 
-    transferEdep[t] = 0. ;
-    transferEdepI[t] = 0. ;
-    
-    transfer2Edep[t]  = 0. ;
-    transfer2EdepI[t]  = 0. ;
+  // inductionEdep  = 0. ;
+  // inductionEdepI  = 0. ;
 
-    inductionEdep[t]  = 0. ;
-    inductionEdepI[t]  = 0. ;
+  // driftEdep_B  = 0. ;
+  // driftEdepI_B  = 0. ;
 
-    driftEdep_B[t]  = 0. ;
-    driftEdepI_B[t]  = 0. ;
+  // transferEdep_B  = 0. ;
+  // transferEdepI_B  = 0. ;
 
-    transferEdep_B[t]  = 0. ;
-    transferEdepI_B[t]  = 0. ;
+  // transfer2Edep_B  = 0. ;
+  // transfer2EdepI_B  = 0. ;
 
-    transfer2Edep_B[t]  = 0. ;
-    transfer2EdepI_B[t]  = 0. ;
-
-    inductionEdep_B[t]  = 0. ;
-    inductionEdepI_B[t]  = 0. ;
+  // inductionEdep_B  = 0. ;
+  // inductionEdepI_B  = 0. ;
   
-  }
+  driftEdep.clear();
+  driftEdepI.clear();
+
+  transfer1Edep.clear();
+  transfer1EdepI.clear();
+  
+  transfer2Edep.clear();
+  transfer2EdepI.clear();
+
+  inductionEdep.clear();
+  inductionEdepI.clear();
+
   primaryEne=0.;
   zInteraction=0.;
   
@@ -270,13 +288,6 @@ void TrGEMAnalysis::SetBeam(const G4ParticleDefinition* part, G4double energy)
   beamEnergy = energy;
 }
 
-/*void TrGEMAnalysis::CreateBranch(G4String name, G4int evtNo, G4String type)
-  {
-#ifdef G4ANALYSIS_USE_ROOT
-t->Branch(name, &evtNo, type) ;
-#endif
-}*/
-
 void TrGEMAnalysis::AddParticlesPerEvent(G4int PDGCode) {
   secoxevt++ ;
   if(PDGCode == 11) elexevt++ ;
@@ -285,56 +296,28 @@ void TrGEMAnalysis::AddParticlesPerEvent(G4int PDGCode) {
   else G4cout << "You must implement a new variable" << G4endl ; 
 }
 
-void TrGEMAnalysis::SetSensitivity(G4double *someDriftEdep,G4double *someDriftEdepI,
-                                   G4double *someTransferEdep,G4double *someTransferEdepI,
-                                   G4double *someTransfer2Edep,G4double *someTransfer2EdepI,
-                                   G4double *someInductionEdep,G4double *someInductionEdepI,
+void TrGEMAnalysis::SetDriftSensitivity(G4double someDriftEdep,G4double someDriftEdepI) 
+{
+  driftEdep.push_back(someDriftEdep);
+  driftEdepI.push_back(someDriftEdepI);
+}
 
-                                   G4double *someDriftEdep_B,G4double *someDriftEdepI_B,
-                                   G4double *someTransferEdep_B,G4double *someTransferEdepI_B,
-                                   G4double *someTransfer2Edep_B,G4double *someTransfer2EdepI_B,
-                                   G4double *someInductionEdep_B,G4double *someInductionEdepI_B) {
+void TrGEMAnalysis::SetTransfer1Sensitivity(G4double someTransfer1Edep,G4double someTransfer2EdepI) 
+{
+  transfer1Edep.push_back(someTransfer1Edep);
+  transfer1EdepI.push_back(someTransfer2EdepI);
+}
 
-  for(G4int t=0;t<9;t++){
-    driftEdep[t] = someDriftEdep[t] ;
-    driftEdepI[t] = someDriftEdepI[t] ;
-  }
+void TrGEMAnalysis::SetTransfer2Sensitivity(G4double someTransfer2Edep,G4double someTransfer2EdepI) 
+{
+  transfer2Edep.push_back(someTransfer2Edep);
+  transfer2EdepI.push_back(someTransfer2EdepI);
+}
 
-  for(G4int t=0;t<9;t++){
-    transferEdep[t] = someTransferEdep[t] ;
-    transferEdepI[t] = someTransferEdepI[t] ;
-  }
-  
-  for(G4int t=0;t<9;t++){
-    transfer2Edep[t] = someTransfer2Edep[t] ;
-    transfer2EdepI[t] = someTransfer2EdepI[t] ;
-  }
-  
-  for(G4int t=0;t<9;t++){
-    inductionEdep[t] = someInductionEdep[t] ;
-    inductionEdepI[t] = someInductionEdepI[t] ;
-  }
-  
-  for(G4int t=0;t<9;t++){
-    driftEdep_B[t] = someDriftEdep_B[t] ;
-    driftEdepI_B[t] = someDriftEdepI_B[t] ;
-  }
-
-  for(G4int t=0;t<9;t++){
-    transferEdep_B[t] = someTransferEdep_B[t] ;
-    transferEdepI_B[t] = someTransferEdepI_B[t] ;
-  }
-  
-  for(G4int t=0;t<9;t++){
-    transfer2Edep_B[t] = someTransfer2Edep_B[t] ;
-    transfer2EdepI_B[t] = someTransfer2EdepI_B[t] ;
-  }
-    
-  for(G4int t=0;t<9;t++){
-    inductionEdep_B[t] = someInductionEdep_B[t] ;
-    inductionEdepI_B[t] = someInductionEdepI_B[t] ;
-  }
-
+void TrGEMAnalysis::SetInductionSensitivity(G4double someInductionEdep,G4double someInductionEdepI) 
+{
+  inductionEdep.push_back(someInductionEdep);
+  inductionEdepI.push_back(someInductionEdepI);
 }
 
 //Save Primary data/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -44,31 +44,31 @@ class GasGapSensitiveDetector : public G4VSensitiveDetector
     G4int GetGeneration(G4int index);
 
   private:
-    G4double driftDep[9] ;
-    G4double driftDepI[9] ;
+    // G4double driftDep ;
+    // G4double driftDepI ;
 
-    G4double transferDep[9] ;
-    G4double transferDepI[9] ;
+    // G4double transferDep ;
+    // G4double transferDepI ;
 
-    G4double transfer2Dep[9] ;
-    G4double transfer2DepI[9] ;
+    // G4double transfer2Dep ;
+    // G4double transfer2DepI ;
 
-    G4double inductionDep[9] ;
-    G4double inductionDepI[9] ;
+    // G4double inductionDep ;
+    // G4double inductionDepI ;
  
     //for the second TripleGEM in the super chamber
     
-    G4double driftDep_B[9] ;
-    G4double driftDepI_B[9] ;
+    // G4double driftDep_B ;
+    // G4double driftDepI_B ;
 
-    G4double transferDep_B[9] ;
-    G4double transferDepI_B[9] ;
+    // G4double transferDep_B ;
+    // G4double transferDepI_B ;
 
-    G4double transfer2Dep_B[9] ;
-    G4double transfer2DepI_B[9] ;
+    // G4double transfer2Dep_B ;
+    // G4double transfer2DepI_B ;
 
-    G4double inductionDep_B[9] ;
-    G4double inductionDepI_B[9] ;
+    // G4double inductionDep_B ;
+    // G4double inductionDepI_B ;
 
     // // GARFIELD quantities
     // G4double globalTime ;

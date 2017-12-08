@@ -34,14 +34,18 @@ class TrGEMAnalysis {
     //void CreateBranch(G4String name, G4int evtNo, G4String type) ;
     void AddParticlesPerEvent(G4int PDGCode) ;
     
-    void SetSensitivity(G4double *someDriftEdep,G4double *someDriftEdepI,
-                            G4double *someTransferEdep, G4double *someTransferEdepI,
-                            G4double *someTransfer2Edep, G4double *someTransfer2EdepI,
-                            G4double *someInductionEdep, G4double *someInductionEdepI,
-                            G4double *someDriftEdep_B,G4double *someDriftEdepI_B,
-                            G4double *someTransferEdep_B, G4double *someTransferEdepI_B,
-                            G4double *someTransfer2Edep_B, G4double *someTransfer2EdepI_B,
-                            G4double *someInductionEdep_B, G4double *someInductionEdepI_B) ;
+    // void SetSensitivity(G4double *someDriftEdep,G4double *someDriftEdepI,
+    //                         G4double *someTransferEdep, G4double *someTransferEdepI,
+    //                         G4double *someTransfer2Edep, G4double *someTransfer2EdepI,
+    //                         G4double *someInductionEdep, G4double *someInductionEdepI,
+    //                         G4double *someDriftEdep_B,G4double *someDriftEdepI_B,
+    //                         G4double *someTransferEdep_B, G4double *someTransferEdepI_B,
+    //                         G4double *someTransfer2Edep_B, G4double *someTransfer2EdepI_B,
+    //                         G4double *someInductionEdep_B, G4double *someInductionEdepI_B) ;
+    void SetDriftSensitivity(G4double someDriftEdep,G4double someDriftEdepI);
+    void SetTransfer1Sensitivity(G4double someTransfer1Edep,G4double someTransfer1EdepI);
+    void SetTransfer2Sensitivity(G4double someTransfer2Edep,G4double someTransfer2EdepI);
+    void SetInductionSensitivity(G4double someInductionEdep,G4double someInductionEdepI);
 
     void SavePrimary(G4double primaryene, G4double zinteraction);
     void SaveGapTrack(G4int gapPart, 
@@ -100,29 +104,18 @@ class TrGEMAnalysis {
     G4int secoxevt ;
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    G4double driftEdep[9] ;
-    G4double driftEdepI[9] ;
+    std::vector<G4double> driftEdep ;
+    std::vector<G4double> driftEdepI ;
 
-    G4double transferEdep[9] ;
-    G4double transferEdepI[9] ;
+    std::vector<G4double> transfer1Edep ;
+    std::vector<G4double> transfer1EdepI ;
 
-    G4double transfer2Edep[9] ;
-    G4double transfer2EdepI[9] ;
+    std::vector<G4double> transfer2Edep ;
+    std::vector<G4double> transfer2EdepI ;
 
-    G4double inductionEdep[9] ;
-    G4double inductionEdepI[9] ;
+    std::vector<G4double> inductionEdep ;
+    std::vector<G4double> inductionEdepI ;
 
-    G4double driftEdep_B[9] ;
-    G4double driftEdepI_B[9] ;
-
-    G4double transferEdep_B[9] ;
-    G4double transferEdepI_B[9] ;
-
-    G4double transfer2Edep_B[9] ;
-    G4double transfer2EdepI_B[9] ;
-
-    G4double inductionEdep_B[9] ;
-    G4double inductionEdepI_B[9] ;
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     G4double primaryEne;
