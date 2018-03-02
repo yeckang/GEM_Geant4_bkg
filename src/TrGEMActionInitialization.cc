@@ -4,6 +4,7 @@
 #include "TrGEMEventAction.hh"
 #include "TrGEMSteppingAction.hh"
 #include "TrGEMStackingAction.hh"
+#include "TrGEMTrackingAction.hh"
 
 TrGEMActionInitialization::TrGEMActionInitialization()
 : G4VUserActionInitialization()
@@ -35,4 +36,7 @@ void TrGEMActionInitialization::Build() const {
 
 	TrGEMStackingAction* stackingAction = new TrGEMStackingAction();
 	SetUserAction(stackingAction);
+
+	TrGEMTrackingAction* trackingAction = new TrGEMTrackingAction();
+	SetUserAction(trackingAction);
 }

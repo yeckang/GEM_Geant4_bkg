@@ -55,6 +55,10 @@ class LouvainPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
             
   private:
     G4ParticleGun*  fParticleGun;
+    G4double lmaxx;
+    G4double lmaxy;
+    std::vector<G4double> lxx;
+    std::vector<G4double> lyy;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

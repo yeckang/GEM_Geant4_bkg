@@ -3,6 +3,7 @@
 
 #include "globals.hh"
 #include <vector>
+#include <map>
 
 class G4Run;
 class G4Event;
@@ -20,6 +21,7 @@ class TrGEMAnalysis {
     static TrGEMAnalysis* GetInstance();
     ~TrGEMAnalysis();
 
+    void SetFileName(const G4String name);
     void PrepareNewEvent(const G4Event* anEvent);
     void PDGHisto(std::vector<G4double> PDGvector) ;
     void EndOfEvent(const G4Event* anEvent);
@@ -42,10 +44,11 @@ class TrGEMAnalysis {
     //                         G4double *someTransferEdep_B, G4double *someTransferEdepI_B,
     //                         G4double *someTransfer2Edep_B, G4double *someTransfer2EdepI_B,
     //                         G4double *someInductionEdep_B, G4double *someInductionEdepI_B) ;
-    void SetDriftSensitivity(G4double someDriftEdep,G4double someDriftEdepI);
-    void SetTransfer1Sensitivity(G4double someTransfer1Edep,G4double someTransfer1EdepI);
-    void SetTransfer2Sensitivity(G4double someTransfer2Edep,G4double someTransfer2EdepI);
-    void SetInductionSensitivity(G4double someInductionEdep,G4double someInductionEdepI);
+    // void SetDriftSensitivity(G4double someDriftEdep,G4double someDriftEdepI);
+    // void SetTransfer1Sensitivity(G4double someTransfer1Edep,G4double someTransfer1EdepI);
+    // void SetTransfer2Sensitivity(G4double someTransfer2Edep,G4double someTransfer2EdepI);
+    // void SetInductionSensitivity(G4double someInductionEdep,G4double someInductionEdepI);
+    void SetEnergyDeposition(std::string someVolume, G4double someEdep, G4double someEdepI, G4double someTime);
 
     void SavePrimary(G4double primaryene, G4double zinteraction);
     void SaveGapTrack(G4int gapPart, 
@@ -66,6 +69,8 @@ class TrGEMAnalysis {
                                 G4double aMomentumX, 
                                 G4double aMomentumY, 
                                 G4double aMomentumZ) ;
+
+    void SaveGeneratingTrack(G4int partCode, std::string partName, std::string process, G4double energy, std::string volume, G4int trackID, G4int parentID);
     
   private:
 
@@ -74,6 +79,7 @@ class TrGEMAnalysis {
 
     bool isNewEvent ;
     G4int eventCounter ;
+    G4String fileName;
 
     // beam and calorimeter geometry
     const G4ParticleDefinition* beamParticle;
@@ -104,17 +110,10 @@ class TrGEMAnalysis {
     G4int secoxevt ;
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    std::vector<G4double> driftEdep ;
-    std::vector<G4double> driftEdepI ;
-
-    std::vector<G4double> transfer1Edep ;
-    std::vector<G4double> transfer1EdepI ;
-
-    std::vector<G4double> transfer2Edep ;
-    std::vector<G4double> transfer2EdepI ;
-
-    std::vector<G4double> inductionEdep ;
-    std::vector<G4double> inductionEdepI ;
+    std::vector<std::string> edepVolume;
+    std::vector<G4double> edep;
+    std::vector<G4double> edepI;
+    std::vector<G4double> edepTime;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -135,6 +134,16 @@ class TrGEMAnalysis {
     std::vector<G4int> postTrackPart ;
     std::vector<G4double> postTrackEne ;
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    std::vector<G4int>    generatingPartCode;
+    std::vector<std::string> generatingPartName;
+    std::vector<std::string> generatingProcess;
+    std::vector<G4double> generatingEnergy;
+    std::vector<std::string> generatingVolume;
+    std::vector<G4int> generatingIntNum;
+
+    std::map<G4int, G4int> genMap;
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     G4int vecProcNo ;
     G4bool neutronSensitivity ;
@@ -152,7 +161,7 @@ class TrGEMAnalysis {
     std::vector<G4double>   momentumY ;
     std::vector<G4double>   momentumZ ;
     
-    // std::vector<G4int>  gammaContainer;        
+    // std::vector<G4int>  gammaContainer;        s
 
     // ROOT objects
     TFile*    m_ROOT_file;
@@ -163,6 +172,8 @@ class TrGEMAnalysis {
     //TNtuple*  ntuple;
     TTree     *t ;
     TTree     *g ;
+    TTree     *v ;
+    TTree     *d ;
 };
 
 #endif /* TRGEMANALYSIS_HH */

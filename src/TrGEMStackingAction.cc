@@ -14,7 +14,7 @@ G4ClassificationOfNewTrack TrGEMStackingAction::ClassifyNewTrack( const G4Track 
 {
   // always "urgent" in current applications
   G4ClassificationOfNewTrack result( fUrgent );
-
+  
   if ( aTrack->GetParentID() > 0 ) // This is a secondary
   {
     TrGEMAnalysis::GetInstance()->AddSecondary(aTrack->GetDefinition());

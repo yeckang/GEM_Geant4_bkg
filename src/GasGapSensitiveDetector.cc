@@ -110,6 +110,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
   G4Track* track = step->GetTrack();
 
   G4double energy= step->GetPreStepPoint()->GetKineticEnergy();
+  double t= track->GetGlobalTime();
   double x= track->GetPosition().getX();
   double y= track->GetPosition().getY();
   double z= track->GetPosition().getZ();
@@ -156,58 +157,59 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
     contaPrimary=1;
   }
 
-    // we're in drift gap
-  if(volName == "GasGap1") {
-    // for(G4int t=0;t<9;t++){
-    //     if(t==0) driftDep[t] += edep ;
-    //     if(t==0) driftDepI[t] += edepI ;
-    //     if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
-    //         driftDep[t] += edep ;
-    //         driftDepI[t] += edepI ;
-    //     }
-    // }
-    TrGEMAnalysis::GetInstance()->SetDriftSensitivity(edep, edepI);
-  }
+  // // we're in drift gap
+  // if(volName == "GasGap1") {
+  //   // for(G4int t=0;t<9;t++){
+  //   //     if(t==0) driftDep[t] += edep ;
+  //   //     if(t==0) driftDepI[t] += edepI ;
+  //   //     if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
+  //   //         driftDep[t] += edep ;
+  //   //         driftDepI[t] += edepI ;
+  //   //     }
+  //   // }
+  //   TrGEMAnalysis::GetInstance()->SetDriftSensitivity(edep, edepI);
+  // }
 
-  // we're in transfer1gap
-  if(volName == "GasGap2") {
-    // for(G4int t=0;t<9;t++){
-    //   if(t==0) transferDep[t] += edep ;
-    //   if(t==0) transferDepI[t] += edepI ;
-    //   if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
-    //     transferDep[t] += edep ;
-    //     transferDepI[t] += edepI ;
-    //   }
-    // } 
-    TrGEMAnalysis::GetInstance()->SetTransfer1Sensitivity(edep, edepI);
-  }
+  // // we're in transfer1gap
+  // if(volName == "GasGap2") {
+  //   // for(G4int t=0;t<9;t++){
+  //   //   if(t==0) transferDep[t] += edep ;
+  //   //   if(t==0) transferDepI[t] += edepI ;
+  //   //   if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
+  //   //     transferDep[t] += edep ;
+  //   //     transferDepI[t] += edepI ;
+  //   //   }
+  //   // } 
+  //   TrGEMAnalysis::GetInstance()->SetTransfer1Sensitivity(edep, edepI);
+  // }
 
-  // we're in transfer2gap
-  if(volName == "GasGap3") {
-    // for(G4int t=0;t<9;t++){
-    //   if(t==0) transfer2Dep[t] += edep ;
-    //   if(t==0) transfer2DepI[t] += edepI ;
-    //   if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
-    //     transfer2Dep[t] += edep ;
-    //     transfer2DepI[t] += edepI ;
-    //   }
-    // } 
-    TrGEMAnalysis::GetInstance()->SetTransfer2Sensitivity(edep, edepI);
-  }
+  // // we're in transfer2gap
+  // if(volName == "GasGap3") {
+  //   // for(G4int t=0;t<9;t++){
+  //   //   if(t==0) transfer2Dep[t] += edep ;
+  //   //   if(t==0) transfer2DepI[t] += edepI ;
+  //   //   if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
+  //   //     transfer2Dep[t] += edep ;
+  //   //     transfer2DepI[t] += edepI ;
+  //   //   }
+  //   // } 
+  //   TrGEMAnalysis::GetInstance()->SetTransfer2Sensitivity(edep, edepI);
+  // }
 
-  // we're in inductiongap
-  if(volName == "GasGap4") {
-  //   for(G4int t=0;t<9;t++){
-  //     if(t==0) inductionDep[t] += edep ;
-  //     if(t==0) inductionDepI[t] += edepI ;
-  //     if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
-  //       // we're in induction1 gap
-  //       inductionDep[t] += edep ;
-  //       inductionDepI[t] += edepI ;
-  //     }
-  //   } 
-    TrGEMAnalysis::GetInstance()->SetInductionSensitivity(edep, edepI);
-  }
+  // // we're in inductiongap
+  // if(volName == "GasGap4") {
+  // //   for(G4int t=0;t<9;t++){
+  // //     if(t==0) inductionDep[t] += edep ;
+  // //     if(t==0) inductionDepI[t] += edepI ;
+  // //     if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
+  // //       // we're in induction1 gap
+  // //       inductionDep[t] += edep ;
+  // //       inductionDepI[t] += edepI ;
+  // //     }
+  // //   } 
+  //   TrGEMAnalysis::GetInstance()->SetInductionSensitivity(edep, edepI);
+  // }
+  TrGEMAnalysis::GetInstance()->SetEnergyDeposition(volName, edep, edepI, t);
 
 
   // //all for the second chamber in the super chamber

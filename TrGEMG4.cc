@@ -16,6 +16,7 @@
 #include "TrGEMPhysicsList.hh"
 
 #include "TrGEMActionInitialization.hh"
+#include "TrGEMAnalysis.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -65,13 +66,22 @@ int main(int argc, char** argv) {
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   //UImanager->ApplyCommand("/cuts/setLowEdge 100 eV");
-
-  if (!ui)   // batch mode  
-  {
-    G4String command = "/control/execute ";
+  if (!ui){
+    G4String command = "/gun/energy ";
     G4String fileName = argv[1];
+    G4String energy = argv[2];
+    UImanager->ApplyCommand(command+fileName+" "+energy);
+    TrGEMAnalysis::GetInstance()->SetFileName(fileName+energy);
+    command = "/run/beamOn ";
+    fileName = argv[3];
     UImanager->ApplyCommand(command+fileName);
   }
+  // if (!ui)   // batch mode  
+  // {
+  //   G4String command = "/control/execute ";
+  //   G4String fileName = argv[1];
+  //   UImanager->ApplyCommand(command+fileName);
+  // }
   else           // interactive mode : define UI session
   {
     UImanager->ApplyCommand("/control/execute vis.mac");     
