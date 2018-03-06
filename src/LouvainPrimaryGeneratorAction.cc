@@ -57,22 +57,21 @@ LouvainPrimaryGeneratorAction::LouvainPrimaryGeneratorAction()
   G4ParticleDefinition* particlen = G4ParticleTable::GetParticleTable() -> FindParticle("neutron");
 
   fParticleGun  = new G4ParticleGun(particlen,n_particle);
-  fParticleGun->SetParticleEnergy(1*GeV);
+  // fParticleGun->SetParticleEnergy(1*GeV);
   
   /* It opens the file with the initialization settings */
-  // std::ifstream in;
-  // in.open("/home/yechan/Workspace/Kang_bkg/UserData/Flusso_Louvain96.out");
+  std::ifstream in;
+  in.open("/home/yckang/geant4/GEM_Geant4_bkg/UserData/EnergyCDF.txt");
 
-  // G4double xtemp,ytemp;
+  G4double xtemp,ytemp;
 
-  // in >> lmaxx >> lmaxy ;
-  // while(!in.eof()){
-  //   in >> xtemp >> ytemp ;
-  //   lxx.push_back(xtemp);
-  //   lyy.push_back(ytemp);
-  // }
+  while(!in.eof()){
+    in >> xtemp >> ytemp ;
+    ene.push_back(xtemp);
+    cdf.push_back(ytemp);
+  }
 
-  // in.close();
+  in.close();
     
 }
 
@@ -87,9 +86,8 @@ LouvainPrimaryGeneratorAction::~LouvainPrimaryGeneratorAction()
 
 void LouvainPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  // G4double xxx,yyy;
-  // G4int  ifunc=-1;
-  // G4double ene;
+  G4double xxx,yyy;
+  G4double primaryEne;
 
   // set direction
   // neutron
@@ -103,24 +101,19 @@ void LouvainPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   
   // set energy
   // neutron
-  // ifunc=-1;
-  // while (1){
-  //     xxx=G4UniformRand()*lmaxx;
-  //     yyy=G4UniformRand()*lmaxy;
+  yyy=G4UniformRand();
 
-  //     for(G4int i=0; i<lxx.size();i++){
-  //         if(xxx<lxx[i]) {ifunc=i;break;}
-  //     }
-  //     // if( (xx[ifunc]-xxx) >  (xxx-xx[ifunc-1])) ifunc=ifunc-1;
+  for(G4int i=1; i<ene.size();i++)
+  {
+    if( cdf[i] < yyy && yyy < cdf[i+1] )
+    {
+      xxx = (ene[i+1] - ene[i])*2*(G4UniformRand()-0.5);
+      primaryEne = ene[i]+xxx;
+      break;
+    }
+  }
 
-  //     if(yyy<lyy[ifunc]) break;
-
-  // }
-
-  // ene = xxx;
-    // ene=150000.;  // constant for the moment to 150 GeV
-    // G4cout<<" Energy of muon   "<<ene<<G4endl;
-  // fParticleGun->SetParticleEnergy(ene);
+  fParticleGun->SetParticleEnergy(primaryEne*GeV);
     
   //create vertex
   //   

@@ -67,13 +67,10 @@ int main(int argc, char** argv) {
 
   //UImanager->ApplyCommand("/cuts/setLowEdge 100 eV");
   if (!ui){
-    G4String command = "/gun/energy ";
     G4String fileName = argv[1];
-    G4String energy = argv[2];
-    UImanager->ApplyCommand(command+fileName+" "+energy);
-    TrGEMAnalysis::GetInstance()->SetFileName(fileName+energy);
-    command = "/run/beamOn ";
-    fileName = argv[3];
+    TrGEMAnalysis::GetInstance()->SetFileName(fileName);
+    G4String command = "/run/beamOn ";
+    fileName = argv[2];
     UImanager->ApplyCommand(command+fileName);
   }
   // if (!ui)   // batch mode  
