@@ -31,6 +31,33 @@ TrGEMAnalysis::~TrGEMAnalysis()
 TrGEMAnalysis::TrGEMAnalysis() 
 {
   m_ROOT_file = 0;
+  NomeStrati= 
+  {
+    "FakeBottom",                                   //Fake
+    "DriftCopper1","DriftBoard","DriftCopper2",     //Drift Board
+    "GasGap1",                                      //Drift Gap
+    "Gem1Copper1","Gem1","Gem1Copper2",             //gem1
+    "GasGap2",                                      //Transfer I Gap
+    "Gem2Copper1","Gem2","Gem2Copper2",             //gem2
+    "GasGap3",                                      //Transfer II Gap
+    "Gem3Copper1","Gem3","Gem3Copper2",             //gem3
+    "GasGap4",                                      //Induction Gap
+    "ReadCopper1","ReadoutBoard","ReadCopper2",     //Readout Board
+    "FakeTop"                                       //Fake
+  };
+  posProcess=                                       //It comes from FTFP_BERT_HP
+  {
+    "Transportation", "msc", "hIoni", "ionIoni", "hBrems", "hPairProd", "CoulombScat",
+    "eIoni", "eBrem", "annihil", "phot", "compt", "conv", "muIoni", "muBrems", "muPairProd",
+    "photonNuclear", "electronNuclear", "positronNuclear", "muonNuclear", "Decay", "hadElastic",
+    "neutronInelastic", "nCapture", "nFission", "protonInelastic", 
+    "pi+Inelastic", "pi-Inelastic", "kaon+Inelastic", "kaon-Inelastic", "kaon0LInelastic", "kaon0SInelastic",
+    "lambdaInelastic", "anti-lambdaInelastic", "sigma-Inelastic", "anti_sigma-Inelastic", "sigma+Inelastic",
+    "anti_sigma+Inelastic", "xi-Inelastic", "anti_xi-Inelastic", "xi0Inelastic", "anti_xi0Inelastic",
+    "omega-Inelastic", "anti_omega-Inelastic", "anti_protonInelastic", "anti_neutronInelastic", "anti_deuteronInelastic",
+    "anti_tritonInelastic", "anti_He3Inelastic", "anti_alphaInelastic", "hFritiofCaptureAtRest", "hBertiniCaptureAtRest",
+    "muMinusCaptureAtRest", "dInelastic", "tInelastic", "He3Inelastic", "alphaInelastic", "ionInelastic ",
+  };
 }
 
 void TrGEMAnalysis::SetFileName(const G4String name)
@@ -56,7 +83,7 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
   fileName = fileName + ".root";
   m_ROOT_file = new TFile(fileName.c_str(),"RECREATE");
   if(m_ROOT_file) 
-    G4cout << "ROOT file task3.root is created " << G4endl;
+    G4cout << "ROOT file " << fileName << " is created " << G4endl;
   else {
       //G4Exception("ROOT file task3.root has not been created!");
     G4cerr << "ROOT file task3.root has not been created!" << G4endl;
@@ -67,82 +94,43 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
   //m_ROOT_histo1 = new TH1D("e0","Energy deposit in central crystal normalized to beam energy",100,0,1);
   m_ROOT_histo2 = new TH1D("ez","Energy profile along the GEM (mm)",100,0,20);
   m_ROOT_histo3 = new TH1D("egap","Energy profile vs. GasGap",5,0,5);
-  //ntuple = new TNtuple("gasgap1","secondaries in gas gap 1","gapGamma:gapElectron:gapPositron") ;
 
   // create tree and branch(es)
-  t = new TTree("MyRun","Run with awesome data") ;
-
-  // t->Branch("driftEdep",&driftEdep,"driftEdep/D") ;
-  // t->Branch("driftEdepI",&driftEdepI,"driftEdepI/D") ;
-  // t->Branch("transferEdep",&transferEdep, "transferEdep/D") ;
-  // t->Branch("transferEdepI",&transferEdepI, "transferEdepI/D") ;
-  // t->Branch("transfer2Edep",&transfer2Edep, "transfer2Edep/D") ;
-  // t->Branch("transfer2EdepI",&transfer2EdepI, "transfer2EdepI/D") ;
-  // t->Branch("inductionEdep",&inductionEdep, "inductionEdep/D") ;
-  // t->Branch("inductionEdepI",&inductionEdepI, "inductionEdepI/D") ;
-  // t->Branch("driftEdep_B",&driftEdep_B,"driftEdep_B/D") ;
-  // t->Branch("driftEdepI_B",&driftEdepI_B,"driftEdepI_B/D") ;
-  // t->Branch("transferEdep_B",&transferEdep_B, "transferEdep_B/D") ;
-  // t->Branch("transferEdepI_B",&transferEdepI_B, "transferEdepI_B/D") ;
-  // t->Branch("transfer2Edep_B",&transfer2Edep_B, "transfer2Edep_B/D") ;
-  // t->Branch("transfer2EdepI_B",&transfer2EdepI_B, "transfer2EdepI_B/D") ;
-  // t->Branch("inductionEdep_B",&inductionEdep_B, "inductionEdep_B/D") ;
-  // t->Branch("inductionEdepI_B",&inductionEdepI_B, "inductionEdepI_B/D") ;
-
-  // t->Branch("driftEdep",&driftEdep) ;
-  // t->Branch("driftEdepI",&driftEdepI) ;
-  // t->Branch("transfer1Edep",&transfer1Edep) ;
-  // t->Branch("transfer1EdepI",&transfer1EdepI) ;
-  // t->Branch("transfer2Edep",&transfer2Edep) ;
-  // t->Branch("transfer2EdepI",&transfer2EdepI) ;
-  // t->Branch("inductionEdep",&inductionEdep) ;
-  // t->Branch("inductionEdepI",&inductionEdepI) ;
+  t = new TTree("Event","Run with awesome data") ;
 
   t->Branch("primaryEne",&primaryEne, "primaryEne/D") ;
   t->Branch("zInteraction",&zInteraction, "zInteraction/D") ;
+
+  t->Branch("EleGap", &eleGap, "EleGap/I");
+  t->Branch("PosGap", &posGap, "PosGap/I");
+  t->Branch("ChargeGap", &chargeGap, "ChargeGap/I");
   
   t->Branch("gapTrackPart",&gapTrackPart);
   t->Branch("gapTrackCharge", &gapTrackCharge);
-  t->Branch("gapTrackGeneration", &gapTrackGeneration);
-  t->Branch("gapTrackName", &gapTrackName);
-  t->Branch("gapTrackGenProcess",&gapTrackGenProcess);
-  t->Branch("gapTrackVolume",&gapTrackVolume);
-  t->Branch("gapTrackGenZ",&gapTrackGenZ);
-  t->Branch("gapTrackGap",&gapTrackGap);
+  t->Branch("gapTrackIntNum", &gapTrackGeneration);
+  t->Branch("gapTrackGenProcessNum",&gapTrackGenProcessNum);
   t->Branch("gapTrackEne",&gapTrackEne);
+  t->Branch("gapTrackVolume",&gapTrackVolume);
 
-  
-  t->Branch("postTrackPart",&postTrackPart);
-  t->Branch("postTrackEne",&postTrackEne);
+  t->Branch("GarfieldPdg",&pdgCode) ;
+  t->Branch("GarfieldEnergy",&kineticEnergy) ;
+  t->Branch("GarfieldPosX",&positionX) ;
+  t->Branch("GarfieldPosY",&positionY) ;
+  t->Branch("GarfieldPosZ",&positionZ) ;
+  t->Branch("GarfieldMomX",&momentumX) ;
+  t->Branch("GarfieldMomY",&momentumY) ;
+  t->Branch("GarfieldMomZ",&momentumZ) ;
 
- 
-  g = new TTree("Garfield","Interesting variables for Garfield") ;
-  //  g->Branch("globalTime",&globalTime,"globalTime/D") ;
-  g->Branch("pdgCode",&pdgCode) ;
-  g->Branch("kineticEnergy",&kineticEnergy) ;
-  g->Branch("positionX",&positionX) ;
-  g->Branch("positionY",&positionY) ;
-  g->Branch("positionZ",&positionZ) ;
-  g->Branch("momentumX",&momentumX) ;
-  g->Branch("momentumY",&momentumY) ;
-  g->Branch("momentumZ",&momentumZ) ;
-  // g->Branch("momentumDirectionX",&momentumDirectionX,"momentumDirectionX/D") ;
-  // g->Branch("momentumDirectionY",&momentumDirectionY,"momentumDirectionY/D") ;
-  // g->Branch("momentumDirectionZ",&momentumDirectionZ,"momentumDirectionZ/D") ;
+  t->Branch("GenPart", &generatingPartCode) ;
+  t->Branch("GenProcessNum", &generatingProcessNum) ;
+  t->Branch("GenEne", &generatingEnergy) ;
+  t->Branch("GenVolume", &generatingVolume) ;
+  t->Branch("GenIntNum", &generatingIntNum) ;
 
-  v = new TTree("Generating", "Generating Data") ;
-  v->Branch("generatingPartCode", &generatingPartCode) ;
-  v->Branch("generatingPartName", &generatingPartName) ;
-  v->Branch("generatingProcess", &generatingProcess) ;
-  v->Branch("generatingEnergy", &generatingEnergy) ;
-  v->Branch("generatingVolume", &generatingVolume) ;
-  v->Branch("generatingIntNum", &generatingIntNum) ;
-
-  d = new TTree("Edep", "Energy Deposition Data") ;
-  d->Branch("edepVolume", &edepVolume);
-  d->Branch("edep", &edep);
-  d->Branch("edepI", &edepI);
-  d->Branch("edepTime", &edepTime);
+  t->Branch("edepVolume", &edepVolume);
+  t->Branch("edep", &edep);
+  t->Branch("edepI", &edepI);
+  t->Branch("edepTime", &edepTime);
 }
 
 void TrGEMAnalysis::PrepareNewEvent(const G4Event* /*anEvent*/)
@@ -158,42 +146,6 @@ void TrGEMAnalysis::PrepareNewEvent(const G4Event* /*anEvent*/)
   gammaxevt = 0 ;
   secoxevt = 0 ;
 
-  // driftEdep = 0. ;
-  // driftEdepI = 0. ;
-
-  // transferEdep = 0. ;
-  // transferEdepI = 0. ;
-  
-  // transfer2Edep  = 0. ;
-  // transfer2EdepI  = 0. ;
-
-  // inductionEdep  = 0. ;
-  // inductionEdepI  = 0. ;
-
-  // driftEdep_B  = 0. ;
-  // driftEdepI_B  = 0. ;
-
-  // transferEdep_B  = 0. ;
-  // transferEdepI_B  = 0. ;
-
-  // transfer2Edep_B  = 0. ;
-  // transfer2EdepI_B  = 0. ;
-
-  // inductionEdep_B  = 0. ;
-  // inductionEdepI_B  = 0. ;
-  
-  // driftEdep.clear();
-  // driftEdepI.clear();
-
-  // transfer1Edep.clear();
-  // transfer1EdepI.clear();
-  
-  // transfer2Edep.clear();
-  // transfer2EdepI.clear();
-
-  // inductionEdep.clear();
-  // inductionEdepI.clear();
-
   edepVolume.clear();
   edep.clear();
   edepI.clear();
@@ -201,15 +153,17 @@ void TrGEMAnalysis::PrepareNewEvent(const G4Event* /*anEvent*/)
 
   primaryEne=0.;
   zInteraction=0.;
+
+  eleGap = 0;
+  posGap = 0;
+  chargeGap = 0;
   
   gapTrackPart.clear();
   gapTrackCharge.clear();
   gapTrackGeneration.clear();
-  gapTrackName.clear();
-  gapTrackGenProcess.clear();
+  gapTrackGenProcessNum.clear();
   gapTrackVolume.clear();
   gapTrackGenZ.clear();
-  gapTrackGap.clear();
   gapTrackEne.clear();
   
   postTrackPart.clear();
@@ -225,8 +179,7 @@ void TrGEMAnalysis::PrepareNewEvent(const G4Event* /*anEvent*/)
   momentumZ.clear();
 
   generatingPartCode.clear();
-  generatingPartName.clear();
-  generatingProcess.clear();
+  generatingProcessNum.clear();
   generatingEnergy.clear();
   generatingVolume.clear();
   generatingIntNum.clear();
@@ -238,19 +191,7 @@ void TrGEMAnalysis::EndOfEvent(const G4Event* /*anEvent*/)
   //Accumulate over the run
   thisRunTotEM += thisEventTotEM;
 
-  //Uncomment these lines for more verbosity:
-  //G4cout<<"Event: "<< anEvent->GetEventID() <<" Energy in EM calo: "
-  //<<G4BestUnit(thisEventTotEM,"Energy")<<" Secondaries: "<<thisEventSecondaries<<G4endl;
-  //G4cout<<G4BestUnit(thisEventCentralEM,"Energy")<<G4endl;
-
-  // save information to ROOT
-  m_ROOT_histo0->Fill(thisEventTotEM/beamEnergy, 1.0);
-  //ntuple->Fill(double(n_gapGamma[0]),double(n_gapElectron[0]),double(n_gapPositron[0])) ;
-
   t->Fill() ; 
-  g->Fill() ;
-  v->Fill() ;
-  d->Fill() ;
 }
 
 void TrGEMAnalysis::EndOfRun(const G4Run* aRun)
@@ -282,9 +223,6 @@ void TrGEMAnalysis::EndOfRun(const G4Run* aRun)
   // Writing and closing the ROOT file
   m_ROOT_file->cd() ;
   t->Write() ;
-  g->Write() ;
-  v->Write() ;
-  d->Write() ;
   G4cout << "ROOT: files writing..." << G4endl;
   m_ROOT_file->Write();
   G4cout << "ROOT: files closing..." << G4endl;
@@ -334,35 +272,10 @@ void TrGEMAnalysis::AddParticlesPerEvent(G4int PDGCode) {
   else G4cout << "You must implement a new variable" << G4endl ; 
 }
 
-//Save Energy Deposition/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// void TrGEMAnalysis::SetDriftSensitivity(G4double someDriftEdep,G4double someDriftEdepI) 
-// {
-//   driftEdep.push_back(someDriftEdep);
-//   driftEdepI.push_back(someDriftEdepI);
-// }
-
-// void TrGEMAnalysis::SetTransfer1Sensitivity(G4double someTransfer1Edep,G4double someTransfer2EdepI) 
-// {
-//   transfer1Edep.push_back(someTransfer1Edep);
-//   transfer1EdepI.push_back(someTransfer2EdepI);
-// }
-
-// void TrGEMAnalysis::SetTransfer2Sensitivity(G4double someTransfer2Edep,G4double someTransfer2EdepI) 
-// {
-//   transfer2Edep.push_back(someTransfer2Edep);
-//   transfer2EdepI.push_back(someTransfer2EdepI);
-// }
-
-// void TrGEMAnalysis::SetInductionSensitivity(G4double someInductionEdep,G4double someInductionEdepI) 
-// {
-//   inductionEdep.push_back(someInductionEdep);
-//   inductionEdepI.push_back(someInductionEdepI);
-// }
-
 void TrGEMAnalysis::SetEnergyDeposition(std::string someVolme, G4double someEdep, G4double someEdepI, G4double someTime)
 {
-  edepVolume.push_back(someVolme);
+
+  // edepVolume.push_back(someVolme);
   edep.push_back(someEdep);
   edepI.push_back(someEdepI);
   edepTime.push_back(someTime);
@@ -383,30 +296,27 @@ void TrGEMAnalysis::SaveGapTrack(
   G4int gapPart, 
   G4int gapCharge,
   G4int generation,
-  std::string name,
   std::string genprocess, 
   std::string genvolume, 
   G4double genz, 
   std::string volname,  
   G4double kinene) 
 {
+  if(genprocess == "primary") return;
+  if(gapCharge != 0) chargeGap = 1;
+  if(gapPart == 11) eleGap = 1;
+  if(gapPart == -11) posGap = 1;
+  G4int num = FindVolume(genvolume);
+  G4int processNum = FindGapTrackProcess(genprocess);
+
   gapTrackPart.push_back(gapPart) ;
   gapTrackCharge.push_back(gapCharge) ;
   gapTrackGeneration.push_back(generation) ;
-  gapTrackName.push_back(name) ;
-  gapTrackGenProcess.push_back(genprocess) ;
-  gapTrackVolume.push_back(genvolume) ;
+  gapTrackGenProcessNum.push_back(processNum) ;
+  gapTrackVolume.push_back(num);
   gapTrackGenZ.push_back(genz) ;
-  gapTrackGap.push_back(volname) ;
   gapTrackEne.push_back(kinene) ;
 }
-
-void TrGEMAnalysis::SavePostShieldTrack(G4int postPart,  G4double postEne ) {
-  postTrackPart.push_back(postPart) ;
-  postTrackEne.push_back(postEne) ;
-}
-
-//Save Garfield data////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TrGEMAnalysis::SaveGarfieldQuantities( 
   G4int aPdgCode,
@@ -431,13 +341,13 @@ void TrGEMAnalysis::SaveGarfieldQuantities(
 
 void TrGEMAnalysis::SaveGeneratingTrack(
   G4int partCode, 
-  std::string partName, 
   std::string process, 
   G4double energy, 
   std::string volume, 
   G4int trackID, 
   G4int parentID)
 {
+  if(process == "primary") return;
   G4int intNum = 0;
   G4int id = trackID;
   genMap[id] = parentID;
@@ -446,10 +356,40 @@ void TrGEMAnalysis::SaveGeneratingTrack(
     intNum++;
     id = genMap[id];
   }
+  G4int num = FindVolume(volume);
+  G4int processNum = FindGeneratingProcess(process);
   generatingPartCode.push_back(partCode);
-  generatingPartName.push_back(partName);
-  generatingProcess.push_back(process);
+  generatingProcessNum.push_back(processNum);
+  generatingVolume.push_back(num);
   generatingEnergy.push_back(energy);
-  generatingVolume.push_back(volume);
   generatingIntNum.push_back(intNum);
+}
+
+G4int TrGEMAnalysis::FindVolume(std::string volume)
+{
+  for(G4int i = 0; i < 21; i++)
+  {
+    if(volume == (NomeStrati[i]+"Log")) return i;
+  }
+  return -1;
+}
+
+G4int TrGEMAnalysis::FindGapTrackProcess(std::string process)
+{
+  for(G4int i = 0; i < posProcess.size(); i++)
+  {
+    if(posProcess[i] == process) return i;
+  }
+  G4cout << process << G4endl;
+  return -1;
+}
+
+G4int TrGEMAnalysis::FindGeneratingProcess(std::string process)
+{
+  for(G4int i = 0; i < posProcess.size(); i++)
+  {
+    if(posProcess[i] == process) return i;
+  }
+  G4cout << process << G4endl;
+  return -1;
 }

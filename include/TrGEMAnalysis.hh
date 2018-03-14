@@ -31,36 +31,20 @@ class TrGEMAnalysis {
     void AddGapSecondary(const G4ParticleDefinition* part, G4int gapNum);
     void AddEDep(G4double edep, G4double z);
     void AddEDepSD(G4double z, G4int copyno);
-    //void SetEcalZposition(G4double val) { eCalZposition = val; };
     void SetBeam(const G4ParticleDefinition* part, G4double energy);
-    //void CreateBranch(G4String name, G4int evtNo, G4String type) ;
     void AddParticlesPerEvent(G4int PDGCode) ;
     
-    // void SetSensitivity(G4double *someDriftEdep,G4double *someDriftEdepI,
-    //                         G4double *someTransferEdep, G4double *someTransferEdepI,
-    //                         G4double *someTransfer2Edep, G4double *someTransfer2EdepI,
-    //                         G4double *someInductionEdep, G4double *someInductionEdepI,
-    //                         G4double *someDriftEdep_B,G4double *someDriftEdepI_B,
-    //                         G4double *someTransferEdep_B, G4double *someTransferEdepI_B,
-    //                         G4double *someTransfer2Edep_B, G4double *someTransfer2EdepI_B,
-    //                         G4double *someInductionEdep_B, G4double *someInductionEdepI_B) ;
-    // void SetDriftSensitivity(G4double someDriftEdep,G4double someDriftEdepI);
-    // void SetTransfer1Sensitivity(G4double someTransfer1Edep,G4double someTransfer1EdepI);
-    // void SetTransfer2Sensitivity(G4double someTransfer2Edep,G4double someTransfer2EdepI);
-    // void SetInductionSensitivity(G4double someInductionEdep,G4double someInductionEdepI);
     void SetEnergyDeposition(std::string someVolume, G4double someEdep, G4double someEdepI, G4double someTime);
 
     void SavePrimary(G4double primaryene, G4double zinteraction);
     void SaveGapTrack(G4int gapPart, 
                       G4int aCharge,
                       G4int generation,
-                      std::string name,
                       std::string genprocess, 
                       std::string genvolume, 
                       G4double genz, 
                       std::string volname,
                       G4double kinene );
-    void SavePostShieldTrack(G4int postPart, G4double postene);
     void SaveGarfieldQuantities(G4int aPdgCode,
                                 G4double aKineticEnergy,
                                 G4double aPositionX, 
@@ -70,12 +54,19 @@ class TrGEMAnalysis {
                                 G4double aMomentumY, 
                                 G4double aMomentumZ) ;
 
-    void SaveGeneratingTrack(G4int partCode, std::string partName, std::string process, G4double energy, std::string volume, G4int trackID, G4int parentID);
+    void SaveGeneratingTrack(G4int partCode, std::string process, G4double energy, std::string volume, G4int trackID, G4int parentID);
+
+    G4int FindVolume(std::string volume);
+    G4int FindGapTrackProcess(std::string process);
+    G4int FindGeneratingProcess(std::string process);
     
   private:
 
     TrGEMAnalysis();
     static TrGEMAnalysis* singleton;
+
+    std::vector<std::string> NomeStrati;
+    std::vector<std::string> posProcess;
 
     bool isNewEvent ;
     G4int eventCounter ;
@@ -110,7 +101,7 @@ class TrGEMAnalysis {
     G4int secoxevt ;
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    std::vector<std::string> edepVolume;
+    std::vector<G4int> edepVolume;
     std::vector<G4double> edep;
     std::vector<G4double> edepI;
     std::vector<G4double> edepTime;
@@ -120,15 +111,17 @@ class TrGEMAnalysis {
     G4double primaryEne;
     G4double zInteraction;
 
+    G4int eleGap;
+    G4int posGap;
+    G4int chargeGap;
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     std::vector<G4int> gapTrackPart ;
     std::vector<G4int> gapTrackCharge ;
     std::vector<G4int> gapTrackGeneration ;
-    std::vector<std::string> gapTrackName ;
-    std::vector<std::string> gapTrackGenProcess ;
-    std::vector<std::string> gapTrackVolume ;
+    std::vector<G4int> gapTrackGenProcessNum ;
+    std::vector<G4int> gapTrackVolume ;
     std::vector<G4double> gapTrackGenZ ;
-    std::vector<std::string> gapTrackGap ;
     std::vector<G4double> gapTrackEne ;
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     std::vector<G4int> postTrackPart ;
@@ -136,10 +129,9 @@ class TrGEMAnalysis {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     std::vector<G4int>    generatingPartCode;
-    std::vector<std::string> generatingPartName;
-    std::vector<std::string> generatingProcess;
+    std::vector<G4int> generatingProcessNum ;
     std::vector<G4double> generatingEnergy;
-    std::vector<std::string> generatingVolume;
+    std::vector<G4int> generatingVolume;
     std::vector<G4int> generatingIntNum;
 
     std::map<G4int, G4int> genMap;
@@ -171,9 +163,6 @@ class TrGEMAnalysis {
     TH1D*     m_ROOT_histo3;
     //TNtuple*  ntuple;
     TTree     *t ;
-    TTree     *g ;
-    TTree     *v ;
-    TTree     *d ;
 };
 
 #endif /* TRGEMANALYSIS_HH */

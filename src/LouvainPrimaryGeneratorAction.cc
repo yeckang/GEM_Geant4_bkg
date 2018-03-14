@@ -61,7 +61,12 @@ LouvainPrimaryGeneratorAction::LouvainPrimaryGeneratorAction()
   
   /* It opens the file with the initialization settings */
   std::ifstream in;
-  in.open("/home/yckang/geant4/GEM_Geant4_bkg/UserData/EnergyCDF.txt");
+  in.open("/home/scratch/Geant4/CMSSW_8_0_20/src/geant4/GEM_Geant4_bkg/UserData/EnergyCDF.txt");
+
+  if(in.fail())
+  {
+    G4cerr << "Primary energy data has not imported!" << G4endl;
+  }
 
   G4double xtemp,ytemp;
 
@@ -107,7 +112,7 @@ void LouvainPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   {
     if( cdf[i] < yyy && yyy < cdf[i+1] )
     {
-      xxx = (ene[i+1] - ene[i])*2*(G4UniformRand()-0.5);
+      xxx = (ene[i+1] - ene[i])*(G4UniformRand()-0.5);
       primaryEne = ene[i]+xxx;
       break;
     }

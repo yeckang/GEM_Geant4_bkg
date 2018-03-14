@@ -16,14 +16,6 @@
 
 GasGapSensitiveDetector::GasGapSensitiveDetector(G4String SDname)
 : G4VSensitiveDetector(SDname),
-  //    pdgCode(0),
-  //    kineticEnergy(0.),
-  //    positionX(0.),
-  //    positionY(0.),
-  //    positionZ(0.),
-  //    momentumX(0.),
-  //    momentumY(0.),
-  //    momentumZ(0.),
   charge(0),
   primaryene(0.),
   zinteraction(0),
@@ -50,34 +42,6 @@ GasGapSensitiveDetector::GasGapSensitiveDetector(G4String SDname)
   container.clear();
   
   zinteraction=-5;
-  
-  // for(G4int t=0;t<9;t++){
-    
-  //   driftDep[t]=0.;
-  //   driftDepI[t]=0.;
-
-  //   transferDep[t]=0.;
-  //   transferDepI[t]=0.;
-
-  //   transfer2Dep[t]=0.;
-  //   transfer2DepI[t]=0.;
-
-  //   inductionDep[t]=0.;
-  //   inductionDepI[t]=0.;
-
-  //   driftDep_B[t]=0.;
-  //   driftDepI_B[t]=0.;
-
-  //   transferDep_B[t]=0.;
-  //   transferDepI_B[t]=0.;
-
-  //   transfer2Dep_B[t]=0.;
-  //   transfer2DepI_B[t]=0.;
-
-  //   inductionDep_B[t]=0.;
-  //   inductionDepI_B[t]=0.;
-    
-  // }
 }
 
 
@@ -140,8 +104,6 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
   const G4LogicalVolume *  genLogVolume=track->GetLogicalVolumeAtVertex();
   G4String genvolume= genLogVolume->GetName();
 
-  G4String name = track->GetParticleDefinition()->GetParticleName();
-
   if ((*step->GetSecondary()).size()>0 && trackIndex==1 && contaInteraction == 0){
     zinteraction=z; 
     contaInteraction=1;
@@ -156,118 +118,7 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
     primaryene=energy;
     contaPrimary=1;
   }
-
-  // // we're in drift gap
-  // if(volName == "GasGap1") {
-  //   // for(G4int t=0;t<9;t++){
-  //   //     if(t==0) driftDep[t] += edep ;
-  //   //     if(t==0) driftDepI[t] += edepI ;
-  //   //     if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
-  //   //         driftDep[t] += edep ;
-  //   //         driftDepI[t] += edepI ;
-  //   //     }
-  //   // }
-  //   TrGEMAnalysis::GetInstance()->SetDriftSensitivity(edep, edepI);
-  // }
-
-  // // we're in transfer1gap
-  // if(volName == "GasGap2") {
-  //   // for(G4int t=0;t<9;t++){
-  //   //   if(t==0) transferDep[t] += edep ;
-  //   //   if(t==0) transferDepI[t] += edepI ;
-  //   //   if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
-  //   //     transferDep[t] += edep ;
-  //   //     transferDepI[t] += edepI ;
-  //   //   }
-  //   // } 
-  //   TrGEMAnalysis::GetInstance()->SetTransfer1Sensitivity(edep, edepI);
-  // }
-
-  // // we're in transfer2gap
-  // if(volName == "GasGap3") {
-  //   // for(G4int t=0;t<9;t++){
-  //   //   if(t==0) transfer2Dep[t] += edep ;
-  //   //   if(t==0) transfer2DepI[t] += edepI ;
-  //   //   if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
-  //   //     transfer2Dep[t] += edep ;
-  //   //     transfer2DepI[t] += edepI ;
-  //   //   }
-  //   // } 
-  //   TrGEMAnalysis::GetInstance()->SetTransfer2Sensitivity(edep, edepI);
-  // }
-
-  // // we're in inductiongap
-  // if(volName == "GasGap4") {
-  // //   for(G4int t=0;t<9;t++){
-  // //     if(t==0) inductionDep[t] += edep ;
-  // //     if(t==0) inductionDepI[t] += edepI ;
-  // //     if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
-  // //       // we're in induction1 gap
-  // //       inductionDep[t] += edep ;
-  // //       inductionDepI[t] += edepI ;
-  // //     }
-  // //   } 
-  //   TrGEMAnalysis::GetInstance()->SetInductionSensitivity(edep, edepI);
-  // }
   TrGEMAnalysis::GetInstance()->SetEnergyDeposition(volName, edep, edepI, t);
-
-
-  // //all for the second chamber in the super chamber
-  // // we're in drift gap
-  // if(volName == "GasGap1_B") {
-  //   for(G4int t=0;t<9;t++){
-  //     if(t==0) driftDep_B[t] += edep ;
-  //     if(t==0) driftDepI_B[t] += edepI ;
-  //     if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
-  //       driftDep_B[t] += edep ;
-  //       driftDepI_B[t] += edepI ;
-  //     }
-  //   }
-  // }
-
-  // // we're in transfer1gap
-  // if(volName == "GasGap2_B") {
-  //   for(G4int t=0;t<9;t++){
-  //     if(t==0) transferDep_B[t] += edep ;
-  //     if(t==0) transferDepI_B[t] += edepI ;
-  //     if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
-  //       transferDep_B[t] += edep ;
-  //       transferDepI_B[t] += edepI ;
-  //     }
-  //   } 
-  // }
-
-  // // we're in transfer2gap
-  // if(volName == "GasGap3_B") {
-  //   for(G4int t=0;t<9;t++){
-  //     if(t==0) transfer2Dep_B[t] += edep ;
-  //     if(t==0) transfer2DepI_B[t] += edepI ;
-  //     if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
-  //       transfer2Dep_B[t] += edep ;
-  //       transfer2DepI_B[t] += edepI ;
-  //     }
-  //   } 
-  // }
-  // we're in inductiongap
-  // if(volName == "GasGap4_B") {
-  //   for(G4int t=0;t<9;t++){
-  //     if(t==0) inductionDep_B[t] += edep ;
-  //     if(t==0) inductionDepI_B[t] += edepI ;
-  //     if(t>0 && track->GetGlobalTime()< COINCIDENCE[t]){
-  //         // we're in induction1 gap
-  //         inductionDep_B[t] += edep ;
-  //         inductionDepI_B[t] += edepI ;
-  //     }
-  //   } 
-  // }
-
-  //end second chamber in the super chamber
-
-
-
-    // SAVE TRACKS IN LAYER 1
-    //_________________________________________________________________________
-
 
   if(volName == "GasGap1" || volName == "GasGap2") {
     // we're in one of the gaps
@@ -280,11 +131,9 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
     }
 
     if(contaSec!=9999)  {
-      // G4cout<<"New track trackIndex "<<trackIndex<<G4endl;
-      TrGEMAnalysis::GetInstance()->SaveGapTrack(pdg, charge, generation, name, genprocess, genvolume,  genz, volName, energy );
+      TrGEMAnalysis::GetInstance()->SaveGapTrack(pdg, charge, generation, genprocess, genvolume,  genz, volName, energy );
       contaSec=trackIndex;
       ttTrack.push_back(trackIndex);
-      // G4cout<<trackIndex <<" trackIndex pdg "<<pdg<<" genprocess "<<genprocess<<G4endl;
     }  
 
     //FOR GARFIELD
@@ -309,58 +158,6 @@ G4bool GasGapSensitiveDetector::ProcessHits(G4Step *step, G4TouchableHistory *)
       
   }
 
-
-  // // SAVE TRACKS IN LAYER 2
-  // //_________________________________________________________________________
-  // if(volName == "GasGap1_B" || volName == "GasGap2_B") {
-  //   // we're in one of the gaps
-        
-  //   for(G4int T=0;T< ttTrack_B.size();T++){
-  //     if (ttTrack_B[T]==trackIndex){
-  //       contaSec_B=9999;
-  //       break;
-  //     }
-  //   }
-  //   if(contaSec_B!=9999)  {
-  //     // G4cout<<"New track B trackIndex "<<trackIndex<<G4endl;
-  //     TrGEMAnalysis::GetInstance()->SaveGapTrack(pdg, charge, generation, name, genprocess, genvolume,  genz, volName, energy );
-  //     contaSec_B=trackIndex;
-  //     ttTrack_B.push_back(trackIndex);
-          
-  //     //stampa!!
-  //     // G4cout<<trackIndex <<" trackIndexpdg "<<pdg<<" genprocess "<<genprocess<<G4endl;
-  //   }  
-  // }
-  // //_________________________________________________________________________
-
-
-  // if(volName == "FakeTop") {
-
-  //   for(G4int T=0;T< postTrack.size();T++){
-  //     if (postTrack[T]==trackIndex){
-  //       contaTrack=9999;
-  //       break;
-  //     }
-  //   }
-  //   if(contaTrack!=9999)  {
-  //     // G4cout<<"POST track trackIndex "<<trackIndex<<G4endl;
-  //     TrGEMAnalysis::GetInstance()->SavePostShieldTrack(pdg, energy );
-  //     contaTrack=trackIndex;
-  //     postTrack.push_back(trackIndex);
-  //     //for(G4int aa=0;aa<postTrack.size();aa++){
-  //     //G4cout<<" "<<postTrack[aa];
-  //     //}
-  //     //G4cout<<G4endl;
-  //   }  
-  // }
-      
-  //This line is used to store in Analysis class the energy deposited in this layer
-  //The Analysis class will sum up this edep to the current event total energy in this layer
-  //Pass the number directly to the Analysis manager. No Hits objects are created in 
-  //this case
-  //Analysis::GetInstance()->AddEDepHad(layerIndex,edep);
-
-   
   //check if edep is from primary or secondary:
   G4String isPri = step->GetTrack()->GetTrackID() == 1 ? "Yes" : "No";
 
@@ -393,19 +190,7 @@ void GasGapSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 
 void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 {
-  G4double ionizationPotential = 0.45*26*eV + 0.15*33*eV + 0.4*54*eV ; // Ar:CO2:CF4 (45:15:40)
-  // Updated peer-reviewed values. Effective energy to generate a pair. (Sauli '77, Sharma)  
-  // G4double ionizationPotential = 0.45*15.8*eV + 0.15*13.78*eV + 0.4*15.9*eV ; // Ar:CO2:CF4 (45:15:40)
-  // These are values previously used. They represent the minimum ionization potential.
   G4int factor = 5 ;
-  // TrGEMAnalysis::GetInstance()->SetSensitivity( driftDep,driftDepI,
-  //                                               transferDep,transferDepI,
-  //                                               transfer2Dep,transfer2DepI,
-  //                                               inductionDep,inductionDepI,
-  //                                               driftDep_B,driftDepI_B,
-  //                                               transferDep_B,transferDepI_B,
-  //                                               transfer2Dep_B,transfer2DepI_B, 
-  //                                               inductionDep_B,inductionDepI_B) ;
 
   TrGEMAnalysis::GetInstance()->SavePrimary(primaryene,zinteraction) ;
       
@@ -414,35 +199,6 @@ void GasGapSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
   ttTrack_Gar.clear();
   postTrack.clear();
   container.clear();
-
-  // for(G4int t=0;t<9;t++){
-          
-  //   driftDep[t] = 0. ;
-  //   driftDepI[t] = 0. ;
-    
-  //   transferDep[t] = 0. ;
-  //   transferDepI[t] = 0. ;
-
-  //   transfer2Dep[t] = 0. ;
-  //   transfer2DepI[t] = 0. ;
-
-  //   inductionDep[t] = 0. ;
-  //   inductionDepI[t] = 0. ;
-
-  //   driftDep_B[t] = 0. ;
-  //   driftDepI_B[t] = 0. ;
-    
-  //   transferDep_B[t] = 0. ;
-  //   transferDepI_B[t] = 0. ;
-
-  //   transfer2Dep_B[t] = 0. ;
-  //   transfer2DepI_B[t] = 0. ;
-
-  //   inductionDep_B[t] = 0. ;
-  //   inductionDepI_B[t] = 0. ;
-  // }
-
-  //hitCollection->PrintAllHits() ;
 
   contaPrimary=0;
   contaInteraction=0;
