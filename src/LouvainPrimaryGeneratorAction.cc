@@ -112,7 +112,7 @@ void LouvainPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   {
     if( cdf[i] < yyy && yyy < cdf[i+1] )
     {
-      xxx = (ene[i+1] - ene[i])*(G4UniformRand()-0.5);
+      xxx = (ene[i+1] - ene[i])*G4UniformRand();
       primaryEne = ene[i]+xxx;
       break;
     }

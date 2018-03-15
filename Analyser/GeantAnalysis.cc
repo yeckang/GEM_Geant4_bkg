@@ -43,6 +43,7 @@ int main(Int_t argc, Char_t** argv)
   {
     string temp = argv[1];
     GeantAnalysis analysis(temp);
+    
     for(Int_t i = 2; i < argc; i++)
     { 
       temp = argv[i];

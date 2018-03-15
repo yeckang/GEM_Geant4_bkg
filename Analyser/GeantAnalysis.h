@@ -8,6 +8,7 @@
 #include <TTree.h>
 #include <TH1D.h>
 #include <TH2D.h>
+#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -92,8 +93,7 @@ GeantAnalysis::GeantAnalysis(string temp)
     "anti_tritonInelastic", "anti_He3Inelastic", "anti_alphaInelastic", "hFritiofCaptureAtRest", "hBertiniCaptureAtRest",
     "muMinusCaptureAtRest", "dInelastic", "tInelastic", "He3Inelastic", "alphaInelastic", "ionInelastic ",
   };
-  fOutput = new TFile(temp.c_str(), "RECREATE");
-
+  fOutput = TFile::Open(temp.c_str(), "RECREATE");
   fTree = new TTree("Event","Event") ;
 
   hPrimaryEne = new TH1D("Primary Energy", "Primary Energy", 100, -10, +4);
@@ -119,12 +119,13 @@ GeantAnalysis::GeantAnalysis(string temp)
 
   BinLogX(hNeutronProcess);
   BinLogX(hElectronGenProcess);
+  
 
 }
 
 GeantAnalysis::~GeantAnalysis()
 {
-  fOutput->Write();
+  fOutput->Write("",TObject::kOverwrite);
   fOutput->Close();
   return;
 }
