@@ -26,6 +26,8 @@ public:
   HistoMaker(std::string fileName);
   ~HistoMaker();
 
+  TH1D* PrimaryEnergy(Int_t nBins);
+
   TH1D* SensitivityElectron(Int_t nBins);
   TH1D* SensitivityCharge(Int_t nBins);
   // TH1D* ElectronEnergyDist(Int_t nBins);
@@ -97,6 +99,9 @@ void HistoMaker::BinLogX(TH1* h)
 {
   TAxis* axis = h->GetXaxis();
   Int_t bins = axis->GetNbins();
+  axis->SetTitle("Primary Neutron Energy [MeV]");
+  axis->SetTitleOffset(1.2);
+  h->SetStats(0);
 
   Double_t from = axis->GetXmin();
   Double_t to = axis->GetXmax();
@@ -115,6 +120,10 @@ void HistoMaker::BinLogX(TH2* h)
 {
   TAxis* axis = h->GetXaxis();
   Int_t bins = axis->GetNbins();
+  axis->SetTitle("Primary Neutron Energy [MeV]");
+  h->GetZaxis()->SetTitle("Fraction of process in the Energy [%]");
+  axis->SetTitleOffset(1.2);
+  h->SetStats(0);
 
   Double_t from = axis->GetXmin();
   Double_t to = axis->GetXmax();
@@ -129,9 +138,34 @@ void HistoMaker::BinLogX(TH2* h)
   delete new_bins;
 }
 
+TH1D* HistoMaker::PrimaryEnergy(Int_t nBins)
+{
+  TH1D* primaryDist = new TH1D("PrimaryDist", "Primary Neutron's Energy", nBins, -10, +4);
+  primaryDist->GetYaxis()->SetTitle("Fraction [%]");
+  BinLogX(primaryDist);
+
+  TAxis* axis = primaryDist->GetXaxis();
+
+  Double_t from = axis->GetXmin();
+  Double_t to = axis->GetXmax();
+  Int_t fromBin = axis->FindBin(from);
+  Int_t toBin = axis->FindBin(to);
+  Double_t totEntry = entryCount->Integral(fromBin, toBin);
+
+  for(Int_t i = 0; i < nBins; i++)
+  {
+    Double_t entry = entryCount->GetBinContent(i);
+    Double_t energy = entryCount->GetBinCenter(i);
+    primaryDist->Fill(energy, entry*100/totEntry);
+  }
+
+  return primaryDist;
+}
+
 TH1D* HistoMaker::SensitivityElectron(Int_t nBins)
 {
   TH1D* sensitivityPlot = new TH1D("EleSen", "Sensitivity", nBins, -10, +4);
+  sensitivityPlot->GetYaxis()->SetTitle("Response Rate [%]");
   BinLogX(sensitivityPlot);
   TH1D* eleGap = GetHisto1D("EleGap");
 
@@ -151,6 +185,7 @@ TH1D* HistoMaker::SensitivityElectron(Int_t nBins)
 TH1D* HistoMaker::SensitivityCharge(Int_t nBins)
 {
   TH1D* sensitivityPlot = new TH1D("ChargeSen", "Sensitivity", nBins, -10, +4);
+  sensitivityPlot->GetYaxis()->SetTitle("Response Rate [%]");
   BinLogX(sensitivityPlot);
   TH1D* eleGap = GetHisto1D("ChargeGap");
 
