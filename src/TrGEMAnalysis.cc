@@ -105,6 +105,7 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
   t->Branch("PosGap", &posGap, "PosGap/I");
   t->Branch("ChargeGap", &chargeGap, "ChargeGap/I");
   
+  //Variables for sensitivity study, It will be used for drawing plots
   t->Branch("gapTrackPart",&gapTrackPart);
   t->Branch("gapTrackCharge", &gapTrackCharge);
   t->Branch("gapTrackIntNum", &gapTrackGeneration);
@@ -112,6 +113,7 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
   t->Branch("gapTrackEne",&gapTrackEne);
   t->Branch("gapTrackVolume",&gapTrackVolume);
 
+  //If you want to use geant4's result as garfield simulation input, you can use Garfield* variables.
   t->Branch("GarfieldPdg",&pdgCode) ;
   t->Branch("GarfieldEnergy",&kineticEnergy) ;
   t->Branch("GarfieldPosX",&positionX) ;
@@ -121,12 +123,15 @@ void TrGEMAnalysis::PrepareNewRun(const G4Run* /*aRun*/)
   t->Branch("GarfieldMomY",&momentumY) ;
   t->Branch("GarfieldMomZ",&momentumZ) ;
 
+  //gapTrack* variables are only saved when particles get in gasGap.
+  //If you need more information of other particles you can use generating* variables.
   t->Branch("GenPart", &generatingPartCode) ;
   t->Branch("GenProcessNum", &generatingProcessNum) ;
   t->Branch("GenEne", &generatingEnergy) ;
   t->Branch("GenVolume", &generatingVolume) ;
   t->Branch("GenIntNum", &generatingIntNum) ;
 
+  //We can use energy depostion for calculating number of ionization.
   t->Branch("edepVolume", &edepVolume);
   t->Branch("edep", &edep);
   t->Branch("edepI", &edepI);
