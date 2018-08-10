@@ -1,5 +1,5 @@
 #include "TrGEMActionInitialization.hh"
-#include "LouvainPrimaryGeneratorAction.hh"
+#include "TrGEMPrimaryGeneratorAction.hh"
 #include "TrGEMRunAction.hh"
 #include "TrGEMEventAction.hh"
 #include "TrGEMSteppingAction.hh"
@@ -23,20 +23,20 @@ void TrGEMActionInitialization::BuildForMaster() const {
 }
 
 void TrGEMActionInitialization::Build() const {
-  SetUserAction(new LouvainPrimaryGeneratorAction);
+  SetUserAction(new TrGEMPrimaryGeneratorAction);
 	
-	TrGEMRunAction* runAction = new TrGEMRunAction;
-	SetUserAction(runAction);
-	
-	TrGEMEventAction* eventAction = new TrGEMEventAction();
-	SetUserAction(eventAction);
+  TrGEMRunAction* runAction = new TrGEMRunAction;
+  SetUserAction(runAction);
 
-	TrGEMSteppingAction* steppingAction = new TrGEMSteppingAction();
-	SetUserAction(steppingAction);
+  TrGEMEventAction* eventAction = new TrGEMEventAction();
+  SetUserAction(eventAction);
 
-	TrGEMStackingAction* stackingAction = new TrGEMStackingAction();
-	SetUserAction(stackingAction);
+  TrGEMSteppingAction* steppingAction = new TrGEMSteppingAction();
+  SetUserAction(steppingAction);
 
-	TrGEMTrackingAction* trackingAction = new TrGEMTrackingAction();
-	SetUserAction(trackingAction);
+  TrGEMStackingAction* stackingAction = new TrGEMStackingAction();
+  SetUserAction(stackingAction);
+  
+  TrGEMTrackingAction* trackingAction = new TrGEMTrackingAction();
+  SetUserAction(trackingAction);
 }

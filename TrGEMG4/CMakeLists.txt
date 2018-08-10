@@ -1,6 +1,7 @@
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ")
 project(TrGEMG4)
 
 #----------------------------------------------------------------------------
@@ -31,6 +32,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 #----------------------------------------------------------------------------
 # Find ROOT (required package)
 #
+#list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 find_package(ROOT QUIET)
 add_definitions(-DG4ANALYSIS_USE_ROOT)
 if(NOT ROOT_FOUND)
