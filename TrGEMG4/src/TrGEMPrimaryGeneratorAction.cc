@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radioactivedecay/rdecay01/src/LouvainPrimaryGeneratorAction.cc
-/// \brief Implementation of the LouvainPrimaryGeneratorAction class
+/// \file radioactivedecay/rdecay01/src/TrGEMPrimaryGeneratorAction.cc
+/// \brief Implementation of the TrGEMPrimaryGeneratorAction class
 //
 //
 // $Id$
@@ -32,7 +32,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#include "LouvainPrimaryGeneratorAction.hh"
+#include "TrGEMPrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
@@ -49,7 +49,7 @@
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LouvainPrimaryGeneratorAction::LouvainPrimaryGeneratorAction()
+TrGEMPrimaryGeneratorAction::TrGEMPrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   //  fParticleGun  = new G4ParticleGun(n_particle);
@@ -82,14 +82,14 @@ LouvainPrimaryGeneratorAction::LouvainPrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LouvainPrimaryGeneratorAction::~LouvainPrimaryGeneratorAction()
+TrGEMPrimaryGeneratorAction::~TrGEMPrimaryGeneratorAction()
 {
   delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LouvainPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+void TrGEMPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4double xxx,yyy;
   G4double primaryEne;

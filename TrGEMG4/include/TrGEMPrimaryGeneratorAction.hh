@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radioactivedecay/rdecay01/include/LouvainPrimaryGeneratorAction.hh
-/// \brief Definition of the LouvainPrimaryGeneratorAction class
+/// \file radioactivedecay/rdecay01/include/TrGEMPrimaryGeneratorAction.hh
+/// \brief Definition of the TrGEMPrimaryGeneratorAction class
 //
 //
 // $Id$
@@ -32,8 +32,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#ifndef LouvainPrimaryGeneratorAction_h
-#define LouvainPrimaryGeneratorAction_h 1
+#ifndef TrGEMPrimaryGeneratorAction_h
+#define TrGEMPrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
@@ -43,11 +43,11 @@ class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class LouvainPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class TrGEMPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    LouvainPrimaryGeneratorAction();    
-    ~LouvainPrimaryGeneratorAction();
+    TrGEMPrimaryGeneratorAction();    
+    ~TrGEMPrimaryGeneratorAction();
 
   public:
     virtual void GeneratePrimaries(G4Event*);

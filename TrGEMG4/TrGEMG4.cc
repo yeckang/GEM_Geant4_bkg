@@ -9,7 +9,7 @@
 // #include "TROOT.h"
 #include "G4EmLivermorePhysics.hh"
 
-#include "LouvainDetectorConstruction.hh"
+#include "TrGEMDetectorConstruction.hh"
 
 #include "G4VModularPhysicsList.hh"
 #include "G4RadioactiveDecayPhysics.hh"
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 // #endif
   // set mandatory initialization classes
 
-  runManager->SetUserInitialization(new LouvainDetectorConstruction ) ;
+  runManager->SetUserInitialization(new TrGEMDetectorConstruction ) ;
   G4VUserPhysicsList* physics = new FTFP_BERT_HP();
 
   runManager->SetUserInitialization(physics);

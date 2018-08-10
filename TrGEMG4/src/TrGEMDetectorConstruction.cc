@@ -1,4 +1,4 @@
-#include "LouvainDetectorConstruction.hh"
+#include "TrGEMDetectorConstruction.hh"
 #include "GasGapSensitiveDetector.hh"
 
 #include "G4NistManager.hh"
@@ -31,7 +31,7 @@
 #include "G4MagIntegratorStepper.hh"
 #include "G4MagIntegratorDriver.hh"
 
-LouvainDetectorConstruction::LouvainDetectorConstruction() :
+TrGEMDetectorConstruction::TrGEMDetectorConstruction() :
   fFR4Mat(0), fGasMat(0), fEmptyMat(0), //fGasDetectorCuts(0), 
   fAirMat(0), fCuMat(0),fKAPTONMat(0),
   tripleGemThinBase(0), tripleGemLargeBase(0), tripleGemHeight(0)
@@ -54,13 +54,13 @@ LouvainDetectorConstruction::LouvainDetectorConstruction() :
 
 }
 
-LouvainDetectorConstruction::~LouvainDetectorConstruction() {
+TrGEMDetectorConstruction::~TrGEMDetectorConstruction() {
 
   // delete fGasDetectorCuts ;
 
 }
 
-void LouvainDetectorConstruction::DefineMaterials() {
+void TrGEMDetectorConstruction::DefineMaterials() {
 
   G4NistManager* manager = G4NistManager::Instance() ;
   // define Elements
@@ -143,7 +143,7 @@ void LouvainDetectorConstruction::DefineMaterials() {
 
 }
 
-G4VPhysicalVolume* LouvainDetectorConstruction::Construct() {
+G4VPhysicalVolume* TrGEMDetectorConstruction::Construct() {
 
 
   // //electric field
@@ -305,7 +305,7 @@ G4VPhysicalVolume* LouvainDetectorConstruction::Construct() {
 
 }
 
-G4Trd* LouvainDetectorConstruction::Trapezoid(G4String name, G4double width) {
+G4Trd* TrGEMDetectorConstruction::Trapezoid(G4String name, G4double width) {
   G4Trd* shape = new G4Trd(name,
                            width/2, width/2,
                            tripleGemThinBase/2,
@@ -314,7 +314,7 @@ G4Trd* LouvainDetectorConstruction::Trapezoid(G4String name, G4double width) {
   return shape ;
 }
 
-void LouvainDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume* pMotherLogical) {
+void TrGEMDetectorConstruction::PlaceGeometry(G4RotationMatrix *pRot, G4ThreeVector tlate, G4LogicalVolume* pMotherLogical) {
 
   G4double XTranslation = 0 ;
 

@@ -1,5 +1,5 @@
-#ifndef LouvainDetectorConstruction_hh
-#define LouvainDetectorConstruction_hh
+#ifndef TrGEMDetectorConstruction_hh
+#define TrGEMDetectorConstruction_hh
 
 class G4LogicalVolume ;
 class G4PhysicalVolume ;
@@ -27,13 +27,13 @@ class G4PhysicalVolume ;
 // #include "G4MagIntegratorStepper.hh"
 // #include "G4MagIntegratorDriver.hh"
 
-class LouvainDetectorConstruction : public G4VUserDetectorConstruction
+class TrGEMDetectorConstruction : public G4VUserDetectorConstruction
 {
   public :
     // Constructor
-    LouvainDetectorConstruction() ;
+    TrGEMDetectorConstruction() ;
     // Destructor
-    virtual ~LouvainDetectorConstruction() ;
+    virtual ~TrGEMDetectorConstruction() ;
 
     void DefineMaterials() ;
     G4VPhysicalVolume* Construct() ;
